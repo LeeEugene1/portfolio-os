@@ -35,6 +35,7 @@ docs/
 
 플랜:
 
+- `docs/plans/00-agent-workflow.md`
 - `docs/plans/01-monorepo-setup.md`
 - `docs/plans/02-prd.md`
 - `docs/plans/03-architecture.md`
@@ -43,6 +44,7 @@ docs/
 
 산출물:
 
+- 에이전트 작업 흐름 문서
 - 모노레포 구조
 - PRD
 - 아키텍처 문서
@@ -262,4 +264,3 @@ flutter analyze
 flutter test
 flutter build apk
 ```
-
