@@ -1,53 +1,53 @@
-# Test Plan
+# 테스트 계획
 
-## Test Strategy
+## 전략
 
-Use a small but strict test harness before feature implementation.
+기능 구현 전에 작지만 엄격한 테스트 하네스를 먼저 구성합니다.
 
-## Web Unit Tests
+## 웹 Unit 테스트
 
-- Cart item add/remove/update.
-- Cart total calculation.
-- Calculator operations.
-- Window state actions.
+- 장바구니 추가/삭제/수량 변경.
+- 장바구니 총액 계산.
+- 계산기 연산.
+- 창 상태 액션.
 
-## Web Component Tests
+## 웹 Component 테스트
 
-- Desktop icon rendering.
-- Window open/close behavior.
-- Portfolio window default open state.
-- Store cart UI.
+- 데스크톱 아이콘 렌더링.
+- 창 열기/닫기 동작.
+- 포트폴리오 창 기본 오픈 상태.
+- Store 장바구니 UI.
 
-## Web E2E Tests
+## 웹 E2E 테스트
 
-- Home page renders.
-- Portfolio window opens on initial load.
-- Store icon opens store window.
-- Product can be added to cart.
-- Cart persists after reload.
-- Calculator can perform a basic operation.
-- Resume entry opens the configured PDF flow.
-- Contact entry opens the configured contact flow.
+- 홈 화면 렌더링.
+- 첫 로드 시 포트폴리오 창 표시.
+- Store 아이콘 클릭 시 Store 창 열림.
+- 상품 장바구니 추가.
+- 새로고침 후 장바구니 유지.
+- 계산기 기본 연산.
+- Resume 진입 동작.
+- Contact 진입 동작.
 
-## Responsive Tests
+## 반응형 테스트
 
-Use Playwright viewport coverage:
+Playwright viewport 기준:
 
-- Desktop browser viewport.
-- Mobile browser viewport.
-- WebView-like mobile viewport.
+- PC 브라우저 viewport.
+- 모바일 브라우저 viewport.
+- WebView에 가까운 모바일 viewport.
 
-## Mobile Shell Tests
+## 모바일 셸 테스트
 
-- Flutter analyze passes.
-- Flutter tests pass.
-- APK build succeeds.
-- WebView loads the configured Vercel URL.
-- Android back button behavior is defined.
+- `flutter analyze` 통과.
+- `flutter test` 통과.
+- APK 빌드 성공.
+- WebView가 Vercel URL 로드.
+- Android back button 동작 정의.
 
-## Validation Commands
+## 검증 명령어
 
-Web:
+웹:
 
 ```bash
 cd apps/web
@@ -55,7 +55,7 @@ npm run verify
 npm run verify:full
 ```
 
-Mobile:
+모바일:
 
 ```bash
 cd apps/mobile-shell

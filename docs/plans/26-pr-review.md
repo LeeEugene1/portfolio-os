@@ -1,24 +1,24 @@
-# 26. PR Review Plan
+# 26. PR 리뷰 플랜
 
-## Goal
+## 목표
 
-Review implementation quality before merging final changes.
+최종 merge 전에 구현 품질을 리뷰합니다.
 
-## Tasks
+## 작업
 
-- Review changed files.
-- Check tests cover changed behavior.
-- Check docs match implementation.
-- Check no MVP scope creep was added.
-- Check CI is passing.
+- 변경 파일 검토.
+- 변경된 동작에 테스트가 있는지 확인.
+- 문서가 구현과 일치하는지 확인.
+- MVP 범위를 벗어난 작업이 없는지 확인.
+- CI 통과 여부 확인.
 
-## Acceptance Criteria
+## 완료 기준
 
-- PR has clear summary.
-- CI passes.
-- Review findings are resolved or documented.
+- PR summary가 명확합니다.
+- CI가 통과합니다.
+- 리뷰 지적사항이 해결되거나 문서화됩니다.
 
-## Validation
+## 검증
 
 ```bash
 gh pr checks

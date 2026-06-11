@@ -1,24 +1,24 @@
-# 27. Release Plan
+# 27. 릴리스 플랜
 
-## Goal
+## 목표
 
-Complete production web deployment and APK artifact release.
+Production 웹 배포와 APK artifact 릴리스를 완료합니다.
 
-## Tasks
+## 작업
 
-- Confirm Vercel production deployment.
-- Build final APK.
-- Attach or publish APK artifact.
-- Update README with usage and deployment notes.
-- Tag release if desired.
+- Vercel production 배포 확인.
+- 최종 APK 빌드.
+- APK artifact 첨부 또는 배포.
+- README에 실행/검증/빌드 방법 업데이트.
+- 필요하면 release tag 생성.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Production URL is available.
-- APK artifact is available.
-- README explains how to run, verify, and build.
+- production URL을 사용할 수 있습니다.
+- APK artifact를 사용할 수 있습니다.
+- README가 실행, 검증, 빌드 방법을 설명합니다.
 
-## Validation
+## 검증
 
 ```bash
 gh release list

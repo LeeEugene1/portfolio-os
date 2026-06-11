@@ -1,25 +1,25 @@
-# 24. Mobile CI Plan
+# 24. Mobile CI 플랜
 
-## Goal
+## 목표
 
-Add GitHub Actions for Flutter validation and APK build.
+Flutter 검증과 APK 빌드용 GitHub Actions를 추가합니다.
 
-## Tasks
+## 작업
 
-- Create `.github/workflows/mobile-ci.yml`.
-- Set up Flutter.
-- Run `flutter analyze`.
-- Run `flutter test`.
-- Run `flutter build apk`.
-- Upload APK artifact if desired.
+- `.github/workflows/mobile-ci.yml` 생성.
+- Flutter 설정.
+- `flutter analyze` 실행.
+- `flutter test` 실행.
+- `flutter build apk` 실행.
+- 필요하면 APK artifact 업로드.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Mobile CI runs on pull requests.
-- Mobile CI runs on pushes to `main`.
-- CI fails if analyze, tests, or APK build fails.
+- Mobile CI가 pull request에서 실행됩니다.
+- Mobile CI가 `main` push에서 실행됩니다.
+- analyze, test, APK build 실패 시 CI가 실패합니다.
 
-## Validation
+## 검증
 
 ```bash
 gh workflow list

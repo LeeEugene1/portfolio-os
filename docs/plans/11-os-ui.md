@@ -1,25 +1,25 @@
-# 11. OS UI Plan
+# 11. OS UI 플랜
 
-## Goal
+## 목표
 
-Implement the core OS-style desktop interface.
+OS 스타일 데스크톱 인터페이스의 핵심을 구현합니다.
 
-## Tasks
+## 작업
 
-- Create desktop shell.
-- Add app icons.
-- Add window component.
-- Add window focus behavior.
-- Open Portfolio window by default.
+- 데스크톱 셸 생성.
+- 앱 아이콘 추가.
+- 창 컴포넌트 추가.
+- 창 포커스 동작 추가.
+- Portfolio 창을 기본으로 오픈.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Home screen looks like an OS desktop.
-- Portfolio window appears on first load.
-- Icons can open their matching windows.
-- Window layout works on desktop and mobile.
+- 홈 화면이 OS 바탕화면처럼 보입니다.
+- 첫 로드 시 Portfolio 창이 보입니다.
+- 아이콘 클릭으로 해당 창을 열 수 있습니다.
+- 창 레이아웃이 PC와 모바일에서 동작합니다.
 
-## Validation
+## 검증
 
 ```bash
 cd apps/web

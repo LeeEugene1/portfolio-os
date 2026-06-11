@@ -1,25 +1,25 @@
-# 15. Calculator Plan
+# 15. Calculator 플랜
 
-## Goal
+## 목표
 
-Implement the mini calculator app.
+미니 계산기 앱을 구현합니다.
 
-## Tasks
+## 작업
 
-- Add calculator window.
-- Implement number input.
-- Implement basic operations.
-- Implement clear behavior.
-- Handle simple invalid input cases.
-- Add tests.
+- 계산기 창 추가.
+- 숫자 입력 구현.
+- 기본 사칙연산 구현.
+- clear 동작 구현.
+- 단순한 잘못된 입력 케이스 처리.
+- 테스트 추가.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Calculator supports basic arithmetic.
-- Calculator works with pointer input.
-- Calculator has unit or component tests.
+- 계산기가 기본 사칙연산을 지원합니다.
+- 포인터 입력으로 계산기를 사용할 수 있습니다.
+- 계산기 unit 또는 component test가 있습니다.
 
-## Validation
+## 검증
 
 ```bash
 cd apps/web

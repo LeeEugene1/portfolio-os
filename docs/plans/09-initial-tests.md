@@ -1,22 +1,22 @@
-# 09. Initial Tests Plan
+# 09. 초기 테스트 플랜
 
-## Goal
+## 목표
 
-Add smoke tests so the harness is proven before feature work.
+기능 구현 전에 테스트 하네스가 실제로 동작하는지 smoke test로 확인합니다.
 
-## Tasks
+## 작업
 
-- Add one Vitest smoke test.
-- Add one Playwright home render test.
-- Ensure tests are deterministic.
+- Vitest smoke test 1개 추가.
+- Playwright home render test 1개 추가.
+- 테스트가 환경에 따라 흔들리지 않도록 구성.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Unit test passes.
-- E2E smoke test passes.
-- CI can run the same commands.
+- Unit smoke test가 통과합니다.
+- E2E smoke test가 통과합니다.
+- CI에서 같은 명령어를 실행할 수 있습니다.
 
-## Validation
+## 검증
 
 ```bash
 cd apps/web

@@ -1,24 +1,24 @@
-# 10. Web CI Plan
+# 10. Web CI 플랜
 
-## Goal
+## 목표
 
-Add GitHub Actions for web validation.
+웹 검증용 GitHub Actions를 추가합니다.
 
-## Tasks
+## 작업
 
-- Create `.github/workflows/web-ci.yml`.
-- Set working directory to `apps/web`.
-- Install dependencies.
-- Run `npm run verify`.
-- Optionally install Playwright and run E2E.
+- `.github/workflows/web-ci.yml` 생성.
+- working directory를 `apps/web`으로 설정.
+- 의존성 설치.
+- `npm run verify` 실행.
+- 필요하면 Playwright 설치 후 E2E 실행.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Web CI runs on pull requests.
-- Web CI runs on pushes to `main`.
-- CI fails if build or tests fail.
+- Web CI가 pull request에서 실행됩니다.
+- Web CI가 `main` push에서 실행됩니다.
+- build 또는 test 실패 시 CI가 실패합니다.
 
-## Validation
+## 검증
 
 ```bash
 gh workflow list

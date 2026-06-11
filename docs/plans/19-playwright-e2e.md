@@ -1,24 +1,24 @@
-# 19. Playwright E2E Plan
+# 19. Playwright E2E 플랜
 
-## Goal
+## 목표
 
-Expand E2E coverage for critical user flows.
+핵심 사용자 흐름의 E2E 커버리지를 확장합니다.
 
-## Tasks
+## 작업
 
-- Add desktop viewport tests.
-- Add mobile viewport tests.
-- Test default Portfolio window.
-- Test store cart flow.
-- Test calculator flow.
-- Test resume/contact flow.
+- PC viewport 테스트 추가.
+- 모바일 viewport 테스트 추가.
+- 기본 Portfolio 창 테스트.
+- Store/cart 흐름 테스트.
+- Calculator 흐름 테스트.
+- Resume/Contact 흐름 테스트.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Critical flows are covered by Playwright.
-- `npm run verify:full` passes locally.
+- 핵심 흐름이 Playwright로 검증됩니다.
+- `npm run verify:full`이 로컬에서 통과합니다.
 
-## Validation
+## 검증
 
 ```bash
 cd apps/web

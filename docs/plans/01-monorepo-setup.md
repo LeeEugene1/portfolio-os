@@ -1,31 +1,31 @@
-# 01. Monorepo Setup Plan
+# 01. 모노레포 생성 플랜
 
-## Goal
+## 목표
 
-Create the initial repository structure for the portfolio OS project.
+`portfolio-os` 프로젝트의 초기 저장소 구조를 만듭니다.
 
-## Scope
+## 범위
 
-Create folders and root documentation placeholders only. Do not scaffold Next.js or Flutter yet.
+폴더와 루트 문서 뼈대만 만듭니다. 이 단계에서는 Next.js나 Flutter를 생성하지 않습니다.
 
-## Tasks
+## 작업
 
-- Create `apps/web`.
-- Create `apps/mobile-shell`.
-- Create `docs`.
-- Create `docs/plans`.
-- Create `.github/workflows`.
-- Create root `README.md`.
-- Create `.gitignore`.
+- `apps/web` 생성.
+- `apps/mobile-shell` 생성.
+- `docs` 생성.
+- `docs/plans` 생성.
+- `.github/workflows` 생성.
+- 루트 `README.md` 생성.
+- `.gitignore` 생성.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Repository has the expected top-level structure.
-- Documentation files exist.
-- App folders exist.
-- Git repository can be initialized and committed.
+- 예상한 최상위 구조가 존재합니다.
+- 문서 파일이 존재합니다.
+- 앱 폴더가 존재합니다.
+- Git 저장소를 초기화하고 커밋할 수 있습니다.
 
-## Validation
+## 검증
 
 ```bash
 tree -L 3

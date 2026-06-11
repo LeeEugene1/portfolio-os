@@ -1,24 +1,24 @@
-# 06. Web Scaffold Plan
+# 06. 웹 스캐폴드 플랜
 
-## Goal
+## 목표
 
-Create the Next.js app in `apps/web`.
+`apps/web`에 Next.js 앱을 생성합니다.
 
-## Tasks
+## 작업
 
-- Scaffold Next.js with TypeScript and App Router.
-- Add Tailwind CSS.
-- Confirm local dev server starts.
-- Confirm production build works.
+- TypeScript와 App Router 기반 Next.js 생성.
+- Tailwind CSS 추가.
+- 로컬 dev server 실행 확인.
+- production build 확인.
 
-## Acceptance Criteria
+## 완료 기준
 
-- `apps/web/package.json` exists.
-- `apps/web/app` or `apps/web/src/app` exists.
-- `npm run dev` starts the app.
-- `npm run build` succeeds.
+- `apps/web/package.json`이 존재합니다.
+- `apps/web/app` 또는 `apps/web/src/app`이 존재합니다.
+- `npm run dev`로 앱을 실행할 수 있습니다.
+- `npm run build`가 성공합니다.
 
-## Validation
+## 검증
 
 ```bash
 cd apps/web

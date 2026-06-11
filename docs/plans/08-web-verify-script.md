@@ -1,25 +1,25 @@
-# 08. Web Verify Script Plan
+# 08. 웹 verify 스크립트 플랜
 
-## Goal
+## 목표
 
-Add repeatable web validation scripts.
+반복 가능한 웹 검증 스크립트를 추가합니다.
 
-## Tasks
+## 작업
 
-- Add `lint`.
-- Add `typecheck`.
-- Add `test`.
-- Add `test:e2e`.
-- Add `build`.
-- Add `verify`.
-- Add `verify:full`.
+- `lint` 추가.
+- `typecheck` 추가.
+- `test` 추가.
+- `test:e2e` 추가.
+- `build` 추가.
+- `verify` 추가.
+- `verify:full` 추가.
 
-## Acceptance Criteria
+## 완료 기준
 
-- `npm run verify` runs lint, typecheck, unit tests, and build.
-- `npm run verify:full` also runs Playwright E2E.
+- `npm run verify`가 lint, typecheck, unit test, build를 실행합니다.
+- `npm run verify:full`이 Playwright E2E까지 실행합니다.
 
-## Validation
+## 검증
 
 ```bash
 cd apps/web

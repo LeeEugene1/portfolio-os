@@ -1,23 +1,23 @@
-# 17. Contact Plan
+# 17. Contact 플랜
 
-## Goal
+## 목표
 
-Implement the Contact entry.
+Contact 진입점을 구현합니다.
 
-## Tasks
+## 작업
 
-- Add Contact icon.
-- Add contact window or mail link.
-- Configure email target.
-- Add tests for opening contact flow.
+- Contact 아이콘 추가.
+- Contact 창 또는 mail link 추가.
+- 이메일 대상 설정.
+- Contact 흐름을 여는 테스트 추가.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Contact entry is visible.
-- Contact behavior is clear on web and WebView.
-- No backend form handling is required for MVP.
+- Contact 진입점이 보입니다.
+- Contact 동작이 웹과 WebView에서 명확합니다.
+- MVP에는 백엔드 폼 처리가 필요하지 않습니다.
 
-## Validation
+## 검증
 
 ```bash
 cd apps/web

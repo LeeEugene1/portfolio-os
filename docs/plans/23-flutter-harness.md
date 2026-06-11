@@ -1,22 +1,22 @@
-# 23. Flutter Harness Plan
+# 23. Flutter 하네스 플랜
 
-## Goal
+## 목표
 
-Add repeatable Flutter validation commands.
+반복 가능한 Flutter 검증 명령어를 정리합니다.
 
-## Tasks
+## 작업
 
-- Confirm `flutter analyze`.
-- Confirm `flutter test`.
-- Confirm `flutter build apk`.
-- Document mobile validation in README if needed.
+- `flutter analyze` 확인.
+- `flutter test` 확인.
+- `flutter build apk` 확인.
+- 필요하면 README에 모바일 검증 방법 문서화.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Flutter shell can be validated locally.
-- APK build command succeeds.
+- Flutter 셸을 로컬에서 검증할 수 있습니다.
+- APK 빌드 명령이 성공합니다.
 
-## Validation
+## 검증
 
 ```bash
 cd apps/mobile-shell

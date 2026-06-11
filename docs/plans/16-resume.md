@@ -1,23 +1,23 @@
-# 16. Resume Plan
+# 16. Resume 플랜
 
-## Goal
+## 목표
 
-Implement the Resume PDF entry.
+Resume PDF 진입점을 구현합니다.
 
-## Tasks
+## 작업
 
-- Add Resume icon.
-- Add PDF asset or configured PDF link.
-- Decide internal window vs external tab behavior.
-- Add tests for the chosen behavior.
+- Resume 아이콘 추가.
+- PDF asset 또는 PDF 링크 설정.
+- 내부 창 방식과 외부 탭 방식 중 하나 결정.
+- 선택한 방식에 대한 테스트 추가.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Resume entry is visible.
-- Resume can be opened from desktop.
-- Behavior is responsive and WebView-friendly.
+- Resume 진입점이 보입니다.
+- 바탕화면에서 Resume을 열 수 있습니다.
+- 동작이 반응형과 WebView 환경에 적합합니다.
 
-## Validation
+## 검증
 
 ```bash
 cd apps/web

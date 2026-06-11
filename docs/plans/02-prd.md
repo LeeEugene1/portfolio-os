@@ -1,24 +1,24 @@
-# 02. PRD Plan
+# 02. PRD 작성 플랜
 
-## Goal
+## 목표
 
-Write the product requirements for the OS-inspired portfolio.
+OS 느낌의 포트폴리오 제품 요구사항을 작성합니다.
 
-## Tasks
+## 작업
 
-- Define MVP scope.
-- Define out-of-scope items.
-- Define future scope.
-- Document target users and core flows.
-- Keep WebView and responsive requirements explicit.
+- MVP 범위 정의.
+- 제외 범위 정의.
+- 추후 확장 범위 정의.
+- 핵심 사용자 흐름 정리.
+- WebView와 반응형 요구사항 명시.
 
-## Acceptance Criteria
+## 완료 기준
 
-- `docs/PRD.md` explains what will be built.
-- MVP and future expansion are clearly separated.
-- Store/cart, portfolio, resume, contact, and calculator are covered.
+- `docs/PRD.md`가 무엇을 만들지 설명합니다.
+- MVP와 추후 확장이 명확히 분리됩니다.
+- Store/cart, Portfolio, Resume, Contact, Calculator가 포함됩니다.
 
-## Validation
+## 검증
 
 ```bash
 cat docs/PRD.md

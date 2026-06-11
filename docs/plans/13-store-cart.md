@@ -1,27 +1,27 @@
-# 13. Store Cart Plan
+# 13. Store/cart 플랜
 
-## Goal
+## 목표
 
-Implement the mini store and guest cart.
+미니 쇼핑몰과 비회원 장바구니를 구현합니다.
 
-## Tasks
+## 작업
 
-- Add static product data.
-- Render product listing.
-- Add item to cart.
-- Change quantity.
-- Remove item.
-- Calculate totals.
-- Persist cart in localStorage.
+- 정적 상품 데이터 추가.
+- 상품 목록 렌더링.
+- 장바구니 추가.
+- 수량 변경.
+- 상품 삭제.
+- 합계 계산.
+- `localStorage`에 장바구니 저장.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Store works without login.
-- Cart survives reload.
-- Cart total updates correctly.
-- No backend is required for MVP.
+- 로그인 없이 Store를 사용할 수 있습니다.
+- 장바구니가 새로고침 후에도 유지됩니다.
+- 장바구니 합계가 올바르게 업데이트됩니다.
+- MVP에는 백엔드가 필요하지 않습니다.
 
-## Validation
+## 검증
 
 ```bash
 cd apps/web

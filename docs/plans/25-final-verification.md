@@ -1,25 +1,25 @@
-# 25. Final Verification Plan
+# 25. 최종 검증 플랜
 
-## Goal
+## 목표
 
-Run complete validation before release.
+릴리스 전에 전체 검증을 실행합니다.
 
-## Tasks
+## 작업
 
-- Run web full verification.
-- Run Flutter validation.
-- Check deployed Vercel URL.
-- Check APK WebView behavior.
-- Update docs for any changed commands.
+- 웹 full verification 실행.
+- Flutter 검증 실행.
+- Vercel 배포 URL 확인.
+- APK WebView 동작 확인.
+- 변경된 명령어가 있다면 문서 업데이트.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Web verification passes.
-- Mobile verification passes.
-- Deployed URL works.
-- APK loads the deployed URL.
+- 웹 검증이 통과합니다.
+- 모바일 검증이 통과합니다.
+- 배포 URL이 동작합니다.
+- APK가 배포 URL을 로드합니다.
 
-## Validation
+## 검증
 
 ```bash
 cd apps/web

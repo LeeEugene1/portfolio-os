@@ -1,24 +1,24 @@
-# 20. Vercel Deployment Plan
+# 20. Vercel 배포 플랜
 
-## Goal
+## 목표
 
-Deploy the web app to Vercel.
+웹앱을 Vercel에 배포합니다.
 
-## Tasks
+## 작업
 
-- Configure Vercel project root as `apps/web`.
-- Confirm build command.
-- Confirm output settings.
-- Deploy preview.
-- Promote or deploy production.
+- Vercel project root를 `apps/web`으로 설정.
+- build command 확인.
+- output 설정 확인.
+- preview 배포.
+- production 배포 또는 promote.
 
-## Acceptance Criteria
+## 완료 기준
 
-- Production URL loads the portfolio web app.
-- URL works on desktop and mobile browsers.
-- URL is ready for Flutter WebView.
+- production URL이 포트폴리오 웹앱을 로드합니다.
+- URL이 PC와 모바일 브라우저에서 동작합니다.
+- Flutter WebView가 로드할 준비가 됩니다.
 
-## Validation
+## 검증
 
-Open the production URL on desktop and mobile.
+PC와 모바일에서 production URL을 엽니다.
 

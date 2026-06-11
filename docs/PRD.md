@@ -1,42 +1,42 @@
-# Product Requirements Document
+# 제품 요구사항 정의서
 
-## Goal
+## 목표
 
-Build an OS-inspired responsive portfolio website and package it as a Flutter WebView APK.
+OS 느낌의 반응형 포트폴리오 웹사이트를 만들고, Flutter WebView APK로 패키징합니다.
 
-## Concept
+## 컨셉
 
-The web app should feel like a lightweight desktop operating system. It must work in desktop browsers, mobile browsers, and inside a Flutter WebView.
+웹앱은 가벼운 데스크톱 OS처럼 느껴져야 합니다. PC 브라우저, 모바일 브라우저, Flutter WebView 안에서 모두 사용할 수 있어야 합니다.
 
-Reference:
+레퍼런스:
 
 - https://posthog.com/
 
-## MVP Scope
+## MVP 범위
 
-- OS-style desktop home screen.
-- Portfolio document window opens by default on first load.
-- Store app with guest cart.
-- Resume PDF entry.
-- Contact mail entry.
-- Mini calculator app.
-- Responsive layout for desktop, mobile, and WebView.
-- Next.js web deployment to Vercel.
-- Flutter WebView shell loading the deployed web URL.
+- OS 스타일 바탕화면.
+- 첫 로드 시 포트폴리오 문서 창 자동 오픈.
+- 비회원 장바구니가 있는 미니 쇼핑몰.
+- Resume PDF 진입점.
+- Contact 메일 진입점.
+- 미니 계산기 앱.
+- PC, 모바일, WebView 대응 반응형 레이아웃.
+- Next.js 웹앱 Vercel 배포.
+- 배포된 웹 URL을 로드하는 Flutter WebView 앱.
 
-## Out of Scope for MVP
+## MVP 제외 범위
 
-- Kakao login.
-- Real payment.
-- Backend cart persistence.
-- Admin product management.
-- User accounts.
+- 카카오 로그인.
+- 실제 결제.
+- 백엔드 장바구니 저장.
+- 상품 관리자.
+- 회원 계정.
 
-## Future Scope
+## 추후 확장 범위
 
-- Guest cart API.
-- Backend session cart.
-- Product admin page.
-- Mock checkout.
-- Authentication.
+- 비회원 장바구니 API.
+- 세션 기반 장바구니 저장.
+- 상품 관리자 페이지.
+- 결제 mock.
+- 인증 기능.
 

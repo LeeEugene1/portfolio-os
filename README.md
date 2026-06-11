@@ -1,30 +1,42 @@
 # portfolio-os
 
-An OS-inspired responsive portfolio web app with a mini store, cart, calculator, resume, contact, and Flutter WebView shell.
+OS 느낌의 반응형 포트폴리오 웹앱과 Flutter WebView APK를 만드는 프로젝트입니다.
 
-## Structure
+## 구조
 
 ```txt
 apps/
-  web/
-  mobile-shell/
+  web/            Next.js 반응형 웹
+  mobile-shell/   Flutter WebView 앱
 
 docs/
   PRD.md
   ARCHITECTURE.md
   TEST_PLAN.md
   ORCHESTRATION.md
+  AGENT_WORKFLOW.md
   plans/
 ```
 
-## Execution
+## 실행 방식
 
-This project is executed through plan documents, GitHub Issues, pull requests, and validation scripts.
+이 프로젝트는 문서, GitHub Issue, PR, 검증 스크립트를 기준으로 진행합니다.
 
-Start with:
+기본 흐름:
+
+```txt
+이슈 링크 전달
+  -> 에이전트가 플랜 작성
+  -> 사용자가 플랜 검토/승인
+  -> 에이전트가 개발
+  -> 테스트 실행
+  -> 커밋/PR 생성
+```
+
+시작 문서:
 
 ```bash
 cat docs/ORCHESTRATION.md
-cat docs/plans/01-monorepo-setup.md
+cat docs/AGENT_WORKFLOW.md
 ```
 
