@@ -107,15 +107,48 @@ plan:blocked
 
 ## 브랜치 네이밍
 
-권장 형식:
+브랜치명에는 콜론(`:`)을 쓰지 않습니다. 콜론은 커밋 메시지 prefix에만 사용합니다.
+
+기본 형식:
 
 ```txt
-docs/00-agent-workflow
-chore/01-monorepo-setup
-docs/02-prd
-feat/06-web-scaffold
+<type>/<issue-number>-<short-description>
+```
+
+규칙:
+
+- `type`은 작업 성격을 나타냅니다.
+- `issue-number`는 GitHub Issue 번호를 사용합니다.
+- `short-description`은 영어 kebab-case를 사용합니다.
+- 한 이슈는 하나의 작업 브랜치를 기본으로 합니다.
+- 같은 이슈의 검수 수정은 같은 브랜치에 추가 커밋으로 반영합니다.
+
+권장 type:
+
+```txt
+docs     문서 작업
+feat     기능 추가
+test     테스트 추가/수정
+ci       GitHub Actions, CI/CD
+chore    설정, 하네스, 구조 작업
+style    UI/반응형/스타일 조정
+deploy   배포 설정
+review   리뷰/정리
+release  릴리스
+```
+
+예시:
+
+```txt
+docs/28-agent-workflow
+chore/1-monorepo-setup
+docs/2-prd
+feat/6-web-scaffold
 test/14-store-cart-tests
 ci/10-web-ci
+style/18-responsive-ui
+deploy/20-vercel
+release/27-release
 ```
 
 ## 커밋 메시지
@@ -128,6 +161,13 @@ docs: write product requirements
 feat: scaffold next app
 test: add cart tests
 ci: add web ci workflow
+```
+
+브랜치명과 커밋 메시지는 분리해서 관리합니다.
+
+```txt
+브랜치명: feat/6-web-scaffold
+커밋 메시지: feat: scaffold next app
 ```
 
 ## PR 본문
