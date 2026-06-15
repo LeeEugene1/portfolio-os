@@ -1,9 +1,5 @@
-import { WelcomePanel } from "@/components/welcome-panel";
+import { DesktopShell } from "@/desktop/desktop-shell";
 
 export default function Home() {
-  return (
-    <main className="shell">
-      <WelcomePanel />
-    </main>
-  );
+  return <DesktopShell />;
 }
