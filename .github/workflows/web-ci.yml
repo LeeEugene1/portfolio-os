@@ -1,0 +1,44 @@
+name: Web CI
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/web-ci.yml"
+      - "apps/web/**"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/web-ci.yml"
+      - "apps/web/**"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify web app
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run full verification
+        run: npm run verify:full
