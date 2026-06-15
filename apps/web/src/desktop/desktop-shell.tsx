@@ -7,13 +7,40 @@ import { appsById, desktopApps, type AppId } from "./app-definitions";
 type WindowState = {
   appId: AppId;
   zIndex: number;
+  x: number;
+  y: number;
 };
 
-const initialWindows: WindowState[] = [{ appId: "portfolio", zIndex: 1 }];
+type DragState = {
+  appId: AppId;
+  offsetX: number;
+  offsetY: number;
+};
+
+function createWindowState(appId: AppId, zIndex: number): WindowState {
+  const app = appsById.get(appId);
+
+  return {
+    appId,
+    zIndex,
+    x: app?.defaultPosition.x ?? 0,
+    y: app?.defaultPosition.y ?? 0,
+  };
+}
+
+function clampWindowPosition(x: number, y: number) {
+  return {
+    x: Math.max(12, Math.min(x, window.innerWidth - 120)),
+    y: Math.max(12, Math.min(y, window.innerHeight - 64)),
+  };
+}
+
+const initialWindows: WindowState[] = [createWindowState("portfolio", 1)];
 
 export function DesktopShell() {
   const [windows, setWindows] = useState<WindowState[]>(initialWindows);
   const [nextZIndex, setNextZIndex] = useState(2);
+  const [dragState, setDragState] = useState<DragState | null>(null);
 
   const focusedAppId = useMemo(() => {
     return windows.reduce<WindowState | null>((focused, windowState) => {
@@ -46,7 +73,7 @@ export function DesktopShell() {
         );
       }
 
-      return [...currentWindows, { appId, zIndex: nextZIndex }];
+      return [...currentWindows, createWindowState(appId, nextZIndex)];
     });
     setNextZIndex((current) => current + 1);
   }
@@ -55,6 +82,47 @@ export function DesktopShell() {
     setWindows((currentWindows) =>
       currentWindows.filter((windowState) => windowState.appId !== appId),
     );
+  }
+
+  function startDrag(
+    appId: AppId,
+    event: React.PointerEvent<HTMLElement>,
+    windowState: WindowState,
+  ) {
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    focusWindow(appId);
+    setDragState({
+      appId,
+      offsetX: event.clientX - windowState.x,
+      offsetY: event.clientY - windowState.y,
+    });
+  }
+
+  function dragWindow(event: React.PointerEvent<HTMLElement>) {
+    if (!dragState) {
+      return;
+    }
+
+    const nextPosition = clampWindowPosition(
+      event.clientX - dragState.offsetX,
+      event.clientY - dragState.offsetY,
+    );
+
+    setWindows((currentWindows) =>
+      currentWindows.map((windowState) =>
+        windowState.appId === dragState.appId
+          ? { ...windowState, ...nextPosition }
+          : windowState,
+      ),
+    );
+  }
+
+  function endDrag(event: React.PointerEvent<HTMLElement>) {
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    setDragState(null);
   }
 
   return (
@@ -102,13 +170,21 @@ export function DesktopShell() {
               role="dialog"
               style={{
                 height: app.defaultSize.height,
-                left: app.defaultPosition.x,
-                top: app.defaultPosition.y,
+                left: windowState.x,
+                top: windowState.y,
                 width: app.defaultSize.width,
                 zIndex: windowState.zIndex,
               }}
             >
-              <header className="window-titlebar">
+              <header
+                className="window-titlebar"
+                onPointerDown={(event) =>
+                  startDrag(app.id, event, windowState)
+                }
+                onPointerMove={dragWindow}
+                onPointerUp={endDrag}
+                onPointerCancel={endDrag}
+              >
                 <div>
                   <span className="window-status" aria-hidden="true" />
                   <h1 id={titleId}>{app.title}</h1>
@@ -117,6 +193,7 @@ export function DesktopShell() {
                   aria-label={`Close ${app.label}`}
                   className="window-close"
                   onClick={() => closeApp(app.id)}
+                  onPointerDown={(event) => event.stopPropagation()}
                   type="button"
                 >
                   <X size={16} strokeWidth={2} />

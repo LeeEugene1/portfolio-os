@@ -120,7 +120,14 @@ a {
   justify-content: space-between;
   border-bottom: 1px solid #202124;
   background: #ffca3a;
+  cursor: grab;
   padding: 8px 10px 8px 14px;
+  touch-action: none;
+  user-select: none;
+}
+
+.window-titlebar:active {
+  cursor: grabbing;
 }
 
 .window-titlebar div {
