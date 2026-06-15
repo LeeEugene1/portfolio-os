@@ -4,6 +4,8 @@
 
 GitHub Issue 링크 하나를 기준으로 플랜 검토, 개발, 테스트, 커밋, PR 생성을 일관되게 수행합니다.
 
+이 문서는 에이전트 작업 규칙, 승인 게이트, 브랜치/PR 규칙의 기준 문서입니다. 실행 phase 순서는 `docs/ORCHESTRATION.md`, 검증 명령과 테스트 범위는 `docs/TEST_PLAN.md`를 따릅니다.
+
 ## 입력
 
 사용자는 GitHub Issue 링크를 전달합니다.
