@@ -154,6 +154,8 @@ MVP:
 
 ## 테스트와 CI 책임
 
+구체적인 테스트 범위와 검증 명령은 `docs/TEST_PLAN.md`를 기준으로 합니다. 이 섹션은 아키텍처 관점의 책임 경계만 정의합니다.
+
 웹:
 
 - 창 상태 액션은 단위 테스트로 검증합니다.
@@ -163,23 +165,12 @@ MVP:
 - 핵심 사용자 흐름과 반응형 동작은 Playwright E2E로 검증합니다.
 - 웹 검증 명령은 `apps/web`에서 실행합니다.
 
-```bash
-npm run verify
-npm run verify:full
-```
-
 모바일 셸:
 
 - Flutter 정적 분석과 테스트를 실행합니다.
 - APK 빌드를 검증합니다.
 - WebView가 Vercel production URL을 로드하는지 확인합니다.
 - Android back button, 로딩, 에러 상태를 검증합니다.
-
-```bash
-flutter analyze
-flutter test
-flutter build apk
-```
 
 ## 아키텍처 원칙
 
