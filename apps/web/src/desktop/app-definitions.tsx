@@ -74,7 +74,7 @@ export const desktopApps: DesktopApp[] = [
     label: "Calculator",
     title: "Calculator",
     icon: Calculator,
-    defaultSize: { width: 330, height: 430 },
+    defaultSize: { width: 360, height: 570 },
     defaultPosition: { x: 720, y: 84 },
     content: CalculatorApp,
   },
