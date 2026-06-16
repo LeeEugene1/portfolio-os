@@ -167,6 +167,9 @@ export function DesktopShell() {
       return focused;
     }, null)?.appId;
   }, [windows]);
+  const orderedWindows = useMemo(() => {
+    return [...windows].sort((first, second) => second.zIndex - first.zIndex);
+  }, [windows]);
 
   function focusWindow(appId: AppId) {
     setWindows((currentWindows) =>
@@ -338,7 +341,7 @@ export function DesktopShell() {
       </section>
 
       <section className="window-layer" aria-label="Open windows">
-        {windows.map((windowState) => {
+        {orderedWindows.map((windowState) => {
           const app = appsById.get(windowState.appId);
 
           if (!app) {
@@ -353,6 +356,7 @@ export function DesktopShell() {
             <article
               aria-labelledby={titleId}
               className="desktop-window"
+              data-app-id={app.id}
               data-focused={isFocused}
               key={app.id}
               onPointerDown={() => focusWindow(app.id)}

@@ -1,3 +1,5 @@
+import { CalculatorApp } from "./calculator/calculator-app";
+
 export function PortfolioApp() {
   return (
     <div className="app-content portfolio-app">
@@ -62,21 +64,4 @@ export function ContactApp() {
   );
 }
 
-export function CalculatorApp() {
-  return (
-    <div className="app-content">
-      <p className="eyebrow">Calculator</p>
-      <h2>Calculator shell</h2>
-      <div className="calculator-preview" aria-label="Calculator preview">
-        <output>0</output>
-        {["7", "8", "9", "+", "4", "5", "6", "-", "1", "2", "3", "="].map(
-          (key) => (
-            <button key={key} type="button">
-              {key}
-            </button>
-          ),
-        )}
-      </div>
-    </div>
-  );
-}
+export { CalculatorApp };

@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { DesktopShell } from "./desktop-shell";
 
@@ -29,48 +28,42 @@ describe("DesktopShell", () => {
     }
   });
 
-  it("opens and closes app windows from desktop controls", async () => {
-    const user = userEvent.setup();
-
+  it("opens and closes app windows from desktop controls", () => {
     render(<DesktopShell />);
 
-    await user.click(screen.getByRole("button", { name: "Open Store" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open Store" }));
 
     expect(screen.getByRole("dialog", { name: "Store" })).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Close Store" }));
+    fireEvent.click(screen.getByRole("button", { name: "Close Store" }));
 
     expect(
       screen.queryByRole("dialog", { name: "Store" }),
     ).not.toBeInTheDocument();
   });
 
-  it("brings an existing window forward when its icon is opened again", async () => {
-    const user = userEvent.setup();
-
+  it("brings an existing window forward when its icon is opened again", () => {
     render(<DesktopShell />);
 
     const portfolioWindow = screen.getByRole("dialog", { name: "Portfolio" });
 
-    await user.click(screen.getByRole("button", { name: "Open Store" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open Store" }));
 
     const storeWindow = screen.getByRole("dialog", { name: "Store" });
 
     expect(portfolioWindow).toHaveAttribute("data-focused", "false");
     expect(storeWindow).toHaveAttribute("data-focused", "true");
 
-    await user.click(screen.getByRole("button", { name: "Open Portfolio" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open Portfolio" }));
 
     expect(portfolioWindow).toHaveAttribute("data-focused", "true");
     expect(storeWindow).toHaveAttribute("data-focused", "false");
   });
 
-  it("focuses a window when the user selects it", async () => {
-    const user = userEvent.setup();
-
+  it("focuses a window when the user selects it", () => {
     render(<DesktopShell />);
 
-    await user.click(screen.getByRole("button", { name: "Open Store" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open Store" }));
 
     const portfolioWindow = screen.getByRole("dialog", { name: "Portfolio" });
     const storeWindow = screen.getByRole("dialog", { name: "Store" });
@@ -81,6 +74,16 @@ describe("DesktopShell", () => {
 
     expect(portfolioWindow).toHaveAttribute("data-focused", "true");
     expect(storeWindow).toHaveAttribute("data-focused", "false");
+  });
+
+  it("renders the focused window first for stacked mobile layout", () => {
+    render(<DesktopShell />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Open Calculator" }));
+
+    expect(screen.getAllByRole("dialog")[0]).toHaveAccessibleName(
+      "Calculator",
+    );
   });
 
   it("moves a window by dragging its titlebar", () => {
