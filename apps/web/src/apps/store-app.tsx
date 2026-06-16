@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
-import type { CSSProperties } from "react";
 import { useMemo, useState } from "react";
 import { products, type Product } from "@/data/products";
 import {
@@ -164,11 +163,7 @@ function ProductList({
 
 function ProductThumb({ product }: { product: Product }) {
   return (
-    <div
-      aria-label={`${product.name} image`}
-      className="product-thumb"
-      style={{ "--product-tone": product.imageTone } as CSSProperties}
-    >
+    <div aria-label={`${product.name} image`} className="product-thumb">
       <span>{product.badges[0]}</span>
       <strong>{product.name.slice(0, 2)}</strong>
     </div>
@@ -239,10 +234,9 @@ function OptionDialog({
           <ProductThumb product={product} />
           <strong>{product.name}</strong>
         </div>
-        <button className="option-select" type="button">
+        <div className="option-single">
           <span>{product.optionLabel}</span>
-          <span>⌃</span>
-        </button>
+        </div>
         <div className="option-quantity-card">
           <strong>구매수량</strong>
           <QuantityStepper
