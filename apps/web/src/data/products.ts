@@ -10,7 +10,6 @@ export type Product = {
   shippingNote: string;
   rating: number;
   reviewCount: number;
-  imageTone: string;
 };
 
 export const products: Product[] = [
@@ -26,7 +25,6 @@ export const products: Product[] = [
     shippingNote: "단, 제주 및 도서산간지역은 배송비 발생할 수 있습니다.",
     rating: 4.8,
     reviewCount: 13,
-    imageTone: "#102b56",
   },
   {
     id: "happy-milk",
@@ -40,7 +38,6 @@ export const products: Product[] = [
     shippingNote: "단, 제주 및 도서산간지역은 배송비 발생할 수 있습니다.",
     rating: 4.6,
     reviewCount: 27,
-    imageTone: "#234fc4",
   },
   {
     id: "potato-bread",
@@ -54,6 +51,5 @@ export const products: Product[] = [
     shippingNote: "단, 제주 및 도서산간지역은 배송비 발생할 수 있습니다.",
     rating: 4.9,
     reviewCount: 102,
-    imageTone: "#d58f2f",
   },
 ];
