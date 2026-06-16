@@ -9,6 +9,9 @@ describe("CalculatorApp", () => {
     fireEvent.click(screen.getByRole("button", { name: "2" }));
     fireEvent.click(screen.getByRole("button", { name: "+" }));
     fireEvent.click(screen.getByRole("button", { name: "2" }));
+
+    expect(screen.getByLabelText("Formula")).toHaveTextContent("2 + 2");
+
     fireEvent.click(screen.getByRole("button", { name: "=" }));
 
     expect(

@@ -58,6 +58,14 @@ function getDisplayValue(state: CalculatorState) {
   return Number.parseFloat(state.display);
 }
 
+function getPendingFormula(state: CalculatorState, display: string) {
+  if (state.leftValue === null || state.operator === null) {
+    return state.formula;
+  }
+
+  return `${formatNumber(state.leftValue)} ${operatorSymbols[state.operator]} ${display}`;
+}
+
 function calculate(
   leftValue: number,
   rightValue: number,
@@ -97,14 +105,18 @@ function inputDigit(state: CalculatorState, digit: string): CalculatorState {
     return {
       ...state,
       display: digit,
+      formula: getPendingFormula(state, digit),
       resetOnClear: false,
       waitingForOperand: false,
     };
   }
 
+  const display = state.display === "0" ? digit : `${state.display}${digit}`;
+
   return {
     ...state,
-    display: state.display === "0" ? digit : `${state.display}${digit}`,
+    display,
+    formula: getPendingFormula(state, display),
   };
 }
 
@@ -121,6 +133,7 @@ function inputDecimal(state: CalculatorState): CalculatorState {
     return {
       ...state,
       display: "0.",
+      formula: getPendingFormula(state, "0."),
       resetOnClear: false,
       waitingForOperand: false,
     };
@@ -130,9 +143,12 @@ function inputDecimal(state: CalculatorState): CalculatorState {
     return state;
   }
 
+  const display = `${state.display}.`;
+
   return {
     ...state,
-    display: `${state.display}.`,
+    display,
+    formula: getPendingFormula(state, display),
   };
 }
 
@@ -248,6 +264,7 @@ function inputPercent(state: CalculatorState): CalculatorState {
   return {
     ...state,
     display: formatNumber(value),
+    formula: getPendingFormula(state, formatNumber(value)),
   };
 }
 
@@ -256,11 +273,14 @@ function toggleSign(state: CalculatorState): CalculatorState {
     return state;
   }
 
+  const display = state.display.startsWith("-")
+    ? state.display.slice(1)
+    : `-${state.display}`;
+
   return {
     ...state,
-    display: state.display.startsWith("-")
-      ? state.display.slice(1)
-      : `-${state.display}`,
+    display,
+    formula: getPendingFormula(state, display),
   };
 }
 

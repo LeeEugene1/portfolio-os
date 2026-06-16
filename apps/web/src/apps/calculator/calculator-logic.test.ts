@@ -30,6 +30,7 @@ describe("calculator logic", () => {
     ]);
 
     expect(state.display).toBe("2");
+    expect(state.formula).toBe("2 + 2");
     expect(state.waitingForOperand).toBe(false);
   });
 
