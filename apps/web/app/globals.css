@@ -38,15 +38,14 @@ a {
 }
 
 .desktop-icons {
-  display: grid;
-  grid-template-columns: repeat(1, 88px);
-  gap: 14px;
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 20;
-  width: max-content;
+  pointer-events: none;
 }
 
 .desktop-icon {
+  position: absolute;
   display: grid;
   gap: 7px;
   justify-items: center;
@@ -56,10 +55,17 @@ a {
   border-radius: 8px;
   background: transparent;
   color: #202124;
-  cursor: pointer;
+  cursor: grab;
   font: inherit;
   line-height: 1.2;
   padding: 8px 6px;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+}
+
+.desktop-icon:active {
+  cursor: grabbing;
 }
 
 .desktop-icon:hover,
@@ -289,12 +295,17 @@ a {
   }
 
   .desktop-icons {
+    position: relative;
+    inset: auto;
+    display: grid;
     grid-template-columns: repeat(5, minmax(56px, 1fr));
     gap: 8px;
     width: 100%;
+    pointer-events: auto;
   }
 
   .desktop-icon {
+    position: static;
     width: 100%;
     min-height: 78px;
     padding: 6px 2px;
