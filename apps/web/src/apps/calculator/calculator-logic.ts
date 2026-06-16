@@ -7,6 +7,7 @@ export type CalculatorState = {
   lastRightValue: number | null;
   leftValue: number | null;
   operator: CalculatorOperator | null;
+  resetOnClear: boolean;
   waitingForOperand: boolean;
   error: boolean;
 };
@@ -28,6 +29,7 @@ export const initialCalculatorState: CalculatorState = {
   lastRightValue: null,
   leftValue: null,
   operator: null,
+  resetOnClear: false,
   waitingForOperand: false,
 };
 
@@ -87,10 +89,15 @@ function inputDigit(state: CalculatorState, digit: string): CalculatorState {
     return { ...initialCalculatorState, display: digit };
   }
 
+  if (state.resetOnClear && state.waitingForOperand) {
+    return { ...initialCalculatorState, display: digit };
+  }
+
   if (state.waitingForOperand) {
     return {
       ...state,
       display: digit,
+      resetOnClear: false,
       waitingForOperand: false,
     };
   }
@@ -106,10 +113,15 @@ function inputDecimal(state: CalculatorState): CalculatorState {
     return { ...initialCalculatorState, display: "0." };
   }
 
+  if (state.resetOnClear && state.waitingForOperand) {
+    return { ...initialCalculatorState, display: "0." };
+  }
+
   if (state.waitingForOperand) {
     return {
       ...state,
       display: "0.",
+      resetOnClear: false,
       waitingForOperand: false,
     };
   }
@@ -142,6 +154,7 @@ function inputOperator(
       lastRightValue: null,
       leftValue: currentValue,
       operator,
+      resetOnClear: false,
       waitingForOperand: true,
     };
   }
@@ -163,6 +176,7 @@ function inputOperator(
       lastRightValue: null,
       leftValue: result,
       operator,
+      resetOnClear: false,
       waitingForOperand: true,
     };
   }
@@ -173,6 +187,7 @@ function inputOperator(
     lastOperator: null,
     lastRightValue: null,
     operator,
+    resetOnClear: false,
     waitingForOperand: true,
   };
 }
@@ -213,6 +228,7 @@ function inputEquals(state: CalculatorState): CalculatorState {
     lastRightValue: rightValue,
     leftValue: null,
     operator: null,
+    resetOnClear: true,
     waitingForOperand: true,
   };
 }
@@ -266,9 +282,14 @@ export function reduceCalculatorInput(
         return initialCalculatorState;
       }
 
+      if (state.resetOnClear) {
+        return initialCalculatorState;
+      }
+
       return {
         ...state,
         display: "0",
+        resetOnClear: false,
         waitingForOperand: true,
       };
     case "percent":

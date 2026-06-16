@@ -22,6 +22,17 @@ describe("calculator logic", () => {
     expect(state.formula).toBe("8 + 5");
   });
 
+  it("accepts the right-hand operand before equals", () => {
+    const state = applyInputs([
+      { type: "digit", value: "2" },
+      { type: "operator", value: "add" },
+      { type: "digit", value: "2" },
+    ]);
+
+    expect(state.display).toBe("2");
+    expect(state.waitingForOperand).toBe(false);
+  });
+
   it("supports subtract, multiply, and divide operations", () => {
     expect(
       applyInputs([
@@ -88,6 +99,21 @@ describe("calculator logic", () => {
     expect(clearedEntry.display).toBe("0");
     expect(clearedEntry.operator).toBe("add");
     expect(fullyCleared).toEqual(initialCalculatorState);
+  });
+
+  it("resets all state when clear is pressed after equals", () => {
+    const result = applyInputs([
+      { type: "digit", value: "2" },
+      { type: "operator", value: "add" },
+      { type: "digit", value: "2" },
+      { type: "equals" },
+    ]);
+
+    expect(result.display).toBe("4");
+    expect(result.resetOnClear).toBe(true);
+    expect(reduceCalculatorInput(result, { type: "clear" })).toEqual(
+      initialCalculatorState,
+    );
   });
 
   it("shows an error for division by zero", () => {

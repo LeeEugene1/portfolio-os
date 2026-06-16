@@ -188,6 +188,12 @@ a {
   padding: 20px;
 }
 
+.desktop-window[data-app-id="calculator"] .window-body {
+  background: #252a2d;
+  overflow: hidden;
+  padding: 0;
+}
+
 .app-content {
   display: grid;
   gap: 14px;
@@ -310,6 +316,10 @@ a {
     box-shadow: 5px 5px 0 #202124;
   }
 
+  .desktop-window[data-app-id="calculator"] {
+    height: min(88dvh, 540px) !important;
+  }
+
   .window-body {
     padding: 16px;
   }
@@ -326,36 +336,34 @@ a {
 .calculator-app {
   display: grid;
   height: 100%;
-  min-height: 450px;
   align-content: end;
-  gap: 14px;
+  gap: 7px;
   border-radius: 0 0 6px 6px;
   background: #252a2d;
   color: #f7f8f8;
-  margin: -20px;
-  padding: 18px;
+  padding: 12px;
 }
 
 .calculator-screen {
   display: grid;
-  min-height: 132px;
+  min-height: 82px;
   align-content: end;
-  gap: 8px;
-  padding: 18px 2px 4px;
+  gap: 5px;
+  padding: 8px 2px 2px;
   text-align: right;
 }
 
 .calculator-formula {
-  min-height: 30px;
+  min-height: 20px;
   color: #a9afb3;
-  font-size: 28px;
+  font-size: 18px;
   line-height: 1;
 }
 
 .calculator-display {
   overflow: hidden;
   color: #f7f8f8;
-  font-size: 62px;
+  font-size: 42px;
   font-weight: 300;
   line-height: 1;
   text-overflow: ellipsis;
@@ -365,7 +373,7 @@ a {
 .calculator-keypad {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  gap: 6px;
 }
 
 .calculator-key {
@@ -378,7 +386,7 @@ a {
   color: #ffffff;
   cursor: pointer;
   font: inherit;
-  font-size: 34px;
+  font-size: 24px;
   font-weight: 400;
   line-height: 1;
   min-width: 0;
@@ -401,32 +409,39 @@ a {
 
 .calculator-key-operator {
   background: #ff9500;
-  font-size: 40px;
+  font-size: 30px;
 }
 
 .calculator-key-wide {
   aspect-ratio: auto;
   grid-column: span 2;
   justify-content: start;
-  padding-left: 30px;
+  padding-left: 22px;
 }
 
 @media (max-width: 720px) {
   .calculator-app {
-    min-height: 420px;
-    margin: -16px;
-    padding: 16px;
+    padding: 8px;
+  }
+
+  .calculator-screen {
+    min-height: 66px;
+    padding-top: 4px;
   }
 
   .calculator-display {
-    font-size: 54px;
+    font-size: 36px;
   }
 
   .calculator-key {
-    font-size: 30px;
+    font-size: 22px;
   }
 
   .calculator-key-operator {
-    font-size: 36px;
+    font-size: 28px;
+  }
+
+  .calculator-key-wide {
+    padding-left: 22px;
   }
 }

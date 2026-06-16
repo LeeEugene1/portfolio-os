@@ -90,7 +90,8 @@ export function CalculatorApp() {
     reduceCalculatorInput,
     initialCalculatorState,
   );
-  const clearLabel = state.error || state.display === "0" ? "AC" : "C";
+  const clearLabel =
+    state.error || state.resetOnClear || state.display === "0" ? "AC" : "C";
 
   return (
     <div className="calculator-app" aria-label="Calculator">
