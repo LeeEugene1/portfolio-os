@@ -259,6 +259,164 @@ a {
   line-height: 1.5;
 }
 
+.store-app {
+  gap: 18px;
+}
+
+.store-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.store-header output {
+  flex: 0 0 auto;
+  border: 1px solid #202124;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #202124;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 7px 10px;
+}
+
+.store-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 230px;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.product-list,
+.cart-lines {
+  display: grid;
+  gap: 10px;
+}
+
+.product-card,
+.cart-panel,
+.cart-lines li {
+  border: 1px solid #202124;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.product-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.product-card span {
+  display: inline-block;
+  width: fit-content;
+  margin-bottom: 8px;
+  border: 1px solid #202124;
+  border-radius: 999px;
+  background: #c7f0d8;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 8px;
+}
+
+.product-card-footer,
+.cart-panel-header,
+.cart-line-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.product-card-footer strong,
+.cart-panel-header strong,
+.cart-line-info strong {
+  color: #202124;
+}
+
+.product-card button,
+.cart-line-controls button {
+  border: 1px solid #202124;
+  border-radius: 6px;
+  background: #ffca3a;
+  color: #202124;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+}
+
+.product-card button {
+  min-height: 36px;
+  padding: 7px 10px;
+}
+
+.product-card button:hover,
+.product-card button:focus-visible,
+.cart-line-controls button:hover,
+.cart-line-controls button:focus-visible {
+  background: #ffffff;
+  outline: none;
+}
+
+.cart-panel {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.cart-panel-header h3 {
+  margin: 0;
+}
+
+.empty-cart {
+  border: 1px dashed #8c969a;
+  border-radius: 8px;
+  padding: 18px 12px;
+  text-align: center;
+}
+
+.cart-lines {
+  margin: 0;
+  padding: 0;
+}
+
+.cart-lines li {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  padding: 10px;
+}
+
+.cart-line-info {
+  display: grid;
+  gap: 4px;
+}
+
+.cart-line-info span {
+  color: #4a4f52;
+  font-size: 13px;
+}
+
+.cart-line-controls {
+  justify-content: flex-start;
+}
+
+.cart-line-controls button {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  padding: 0;
+}
+
+.cart-line-controls output {
+  min-width: 24px;
+  color: #202124;
+  font-weight: 800;
+  text-align: center;
+}
+
 .app-link {
   width: fit-content;
   border: 1px solid #202124;
@@ -810,6 +968,10 @@ button.app-link {
 
   .desktop-window[data-app-id="calculator"] {
     height: min(88dvh, 540px) !important;
+  }
+
+  .store-layout {
+    grid-template-columns: 1fr;
   }
 
   .window-body {
