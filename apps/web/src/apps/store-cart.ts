@@ -62,7 +62,7 @@ export function getCartLines(items: CartItem[]): CartLine[] {
       {
         ...item,
         product,
-        lineTotal: product.price * item.quantity,
+      lineTotal: product.salePrice * item.quantity,
       },
     ];
   });
