@@ -16,6 +16,17 @@ describe("DesktopShell", () => {
     expect(
       screen.getByRole("dialog", { name: "Portfolio" }),
     ).toBeInTheDocument();
+    for (const appName of [
+      "Portfolio",
+      "Store",
+      "Resume",
+      "Contact",
+      "Calculator",
+    ]) {
+      expect(
+        screen.getByRole("button", { name: `Open ${appName}` }),
+      ).toBeInTheDocument();
+    }
   });
 
   it("opens and closes app windows from desktop controls", async () => {
@@ -32,6 +43,44 @@ describe("DesktopShell", () => {
     expect(
       screen.queryByRole("dialog", { name: "Store" }),
     ).not.toBeInTheDocument();
+  });
+
+  it("brings an existing window forward when its icon is opened again", async () => {
+    const user = userEvent.setup();
+
+    render(<DesktopShell />);
+
+    const portfolioWindow = screen.getByRole("dialog", { name: "Portfolio" });
+
+    await user.click(screen.getByRole("button", { name: "Open Store" }));
+
+    const storeWindow = screen.getByRole("dialog", { name: "Store" });
+
+    expect(portfolioWindow).toHaveAttribute("data-focused", "false");
+    expect(storeWindow).toHaveAttribute("data-focused", "true");
+
+    await user.click(screen.getByRole("button", { name: "Open Portfolio" }));
+
+    expect(portfolioWindow).toHaveAttribute("data-focused", "true");
+    expect(storeWindow).toHaveAttribute("data-focused", "false");
+  });
+
+  it("focuses a window when the user selects it", async () => {
+    const user = userEvent.setup();
+
+    render(<DesktopShell />);
+
+    await user.click(screen.getByRole("button", { name: "Open Store" }));
+
+    const portfolioWindow = screen.getByRole("dialog", { name: "Portfolio" });
+    const storeWindow = screen.getByRole("dialog", { name: "Store" });
+
+    expect(storeWindow).toHaveAttribute("data-focused", "true");
+
+    fireEvent.pointerDown(portfolioWindow);
+
+    expect(portfolioWindow).toHaveAttribute("data-focused", "true");
+    expect(storeWindow).toHaveAttribute("data-focused", "false");
   });
 
   it("moves a window by dragging its titlebar", () => {
