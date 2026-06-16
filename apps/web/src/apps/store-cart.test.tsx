@@ -8,7 +8,13 @@ import {
   useCartStore,
 } from "@/stores/cart-store";
 import { StoreApp } from "./store-app";
-import { addCartItem, getCartSummary, parseStoredCart } from "./store-cart";
+import {
+  addCartItem,
+  getCartSummary,
+  parseStoredCart,
+  removeCartItem,
+  updateCartItemQuantity,
+} from "./store-cart";
 
 describe("store cart logic", () => {
   it("adds products and calculates total quantity and price", () => {
@@ -42,6 +48,32 @@ describe("store cart logic", () => {
       ),
     ).toEqual([{ productId: firstProduct.id, quantity: 2 }]);
   });
+
+  it("updates quantities and removes items when quantity reaches zero", () => {
+    const [firstProduct] = products;
+    const initialItems = [{ productId: firstProduct.id, quantity: 2 }];
+
+    expect(
+      updateCartItemQuantity(initialItems, firstProduct.id, 4),
+    ).toEqual([{ productId: firstProduct.id, quantity: 4 }]);
+    expect(
+      updateCartItemQuantity(initialItems, firstProduct.id, 0),
+    ).toEqual([]);
+  });
+
+  it("removes products from the cart", () => {
+    const [firstProduct, secondProduct] = products;
+
+    expect(
+      removeCartItem(
+        [
+          { productId: firstProduct.id, quantity: 1 },
+          { productId: secondProduct.id, quantity: 1 },
+        ],
+        firstProduct.id,
+      ),
+    ).toEqual([{ productId: secondProduct.id, quantity: 1 }]);
+  });
 });
 
 describe("cart zustand store", () => {
@@ -64,6 +96,30 @@ describe("cart zustand store", () => {
         firstProduct.id,
       );
     });
+  });
+
+  it("updates, removes, and clears cart items through store actions", () => {
+    const [firstProduct, secondProduct] = products;
+    const cartStore = useCartStore.getState();
+
+    cartStore.addItem(firstProduct.id, 1);
+    cartStore.addItem(secondProduct.id, 2);
+    cartStore.updateQuantity(firstProduct.id, 3);
+
+    expect(useCartStore.getState().items).toEqual([
+      { productId: firstProduct.id, quantity: 3 },
+      { productId: secondProduct.id, quantity: 2 },
+    ]);
+
+    useCartStore.getState().removeItem(secondProduct.id);
+
+    expect(useCartStore.getState().items).toEqual([
+      { productId: firstProduct.id, quantity: 3 },
+    ]);
+
+    useCartStore.getState().clearCart();
+
+    expect(useCartStore.getState().items).toEqual([]);
   });
 });
 
@@ -135,5 +191,34 @@ describe("StoreApp", () => {
 
     expect(screen.getByRole("heading", { name: "Mini storefront" }));
     expect(screen.getByLabelText("Cart item count")).toHaveTextContent("0");
+  });
+
+  it("changes quantity and removes products on the cart page", async () => {
+    const user = userEvent.setup();
+
+    useCartStore.setState({
+      items: [{ productId: products[0].id, quantity: 2 }],
+    });
+
+    render(<StoreApp />);
+
+    await user.click(screen.getByRole("button", { name: "Open cart page" }));
+    await user.click(
+      screen.getByRole("button", {
+        name: `Decrease ${products[0].name} quantity`,
+      }),
+    );
+
+    expect(screen.getByLabelText(`${products[0].name} quantity`)).toHaveTextContent(
+      "1",
+    );
+    expect(screen.getByLabelText("Order total")).toHaveTextContent("₩20,990");
+
+    await user.click(
+      screen.getByRole("button", { name: `Remove ${products[0].name}` }),
+    );
+
+    expect(screen.getByText("장바구니가 비어있습니다.")).toBeInTheDocument();
+    expect(useCartStore.getState().items).toEqual([]);
   });
 });
