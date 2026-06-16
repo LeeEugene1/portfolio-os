@@ -47,7 +47,7 @@ export const desktopApps: DesktopApp[] = [
     label: "Store",
     title: "Store",
     icon: ShoppingBag,
-    defaultSize: { width: 500, height: 380 },
+    defaultSize: { width: 720, height: 520 },
     defaultPosition: { x: 430, y: 148 },
     content: StoreApp,
   },
