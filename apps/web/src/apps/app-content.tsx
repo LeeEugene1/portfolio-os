@@ -1,0 +1,82 @@
+export function PortfolioApp() {
+  return (
+    <div className="app-content portfolio-app">
+      <p className="eyebrow">Featured portfolio</p>
+      <h2>제품처럼 작동하는 포트폴리오</h2>
+      <p>
+        OS 데스크톱 안에서 프로젝트, 역할, 기술 선택, 문제 해결 과정을
+        프로그램 창처럼 탐색할 수 있는 웹 포트폴리오입니다.
+      </p>
+      <div className="project-grid">
+        <section>
+          <h3>Portfolio OS</h3>
+          <p>Next.js, React, TypeScript 기반의 반응형 데스크톱 UI.</p>
+        </section>
+        <section>
+          <h3>Store MVP</h3>
+          <p>정적 상품과 localStorage 장바구니로 구성할 미니 커머스 앱.</p>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+export function StoreApp() {
+  return (
+    <div className="app-content">
+      <p className="eyebrow">Store</p>
+      <h2>Mini storefront</h2>
+      <p>상품 목록과 장바구니 기능이 들어갈 쇼핑몰 프로그램입니다.</p>
+      <ul className="compact-list">
+        <li>정적 상품 데이터</li>
+        <li>비회원 장바구니</li>
+        <li>새로고침 후 상태 복원</li>
+      </ul>
+    </div>
+  );
+}
+
+export function ResumeApp() {
+  return (
+    <div className="app-content">
+      <p className="eyebrow">Resume</p>
+      <h2>Resume entry</h2>
+      <p>이력서 PDF 또는 문서로 이동하는 명확한 진입점을 제공합니다.</p>
+      <a className="app-link" href="#resume">
+        이력서 보기
+      </a>
+    </div>
+  );
+}
+
+export function ContactApp() {
+  return (
+    <div className="app-content">
+      <p className="eyebrow">Contact</p>
+      <h2>Contact channels</h2>
+      <p>이메일과 외부 프로필 링크를 제공하는 연락 프로그램입니다.</p>
+      <a className="app-link" href="mailto:hello@example.com">
+        hello@example.com
+      </a>
+    </div>
+  );
+}
+
+export function CalculatorApp() {
+  return (
+    <div className="app-content">
+      <p className="eyebrow">Calculator</p>
+      <h2>Calculator shell</h2>
+      <div className="calculator-preview" aria-label="Calculator preview">
+        <output>0</output>
+        {["7", "8", "9", "+", "4", "5", "6", "-", "1", "2", "3", "="].map(
+          (key) => (
+            <button key={key} type="button">
+              {key}
+            </button>
+          ),
+        )}
+      </div>
+    </div>
+  );
+}

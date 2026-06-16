@@ -5,6 +5,8 @@ test("renders the portfolio OS home screen", async ({ page }) => {
 
   await expect(page).toHaveTitle("Portfolio OS");
   await expect(
-    page.getByRole("heading", { name: "Portfolio OS" }),
+    page.getByRole("main", { name: "Portfolio OS desktop" }),
   ).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Portfolio" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open Store" })).toBeVisible();
 });

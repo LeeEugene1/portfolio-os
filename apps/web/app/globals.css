@@ -1,6 +1,6 @@
 :root {
   color: #202124;
-  background: #f4f0e8;
+  background: #e8edf0;
   font-family:
     Arial,
     Helvetica,
@@ -16,30 +16,338 @@ body {
   margin: 0;
 }
 
-.shell {
-  display: grid;
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.desktop-shell {
+  position: relative;
   min-height: 100vh;
-  place-items: center;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(32, 33, 36, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32, 33, 36, 0.05) 1px, transparent 1px),
+    linear-gradient(135deg, #eef3f4 0%, #d8e2e1 48%, #f2d49c 100%);
+  background-size:
+    32px 32px,
+    32px 32px,
+    cover;
+  color: #202124;
   padding: 24px;
 }
 
-.welcome-panel {
-  width: min(100%, 560px);
+.desktop-icons {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.desktop-icon {
+  position: absolute;
+  display: grid;
+  gap: 7px;
+  justify-items: center;
+  width: 88px;
+  min-height: 88px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: #202124;
+  cursor: grab;
+  font: inherit;
+  line-height: 1.2;
+  padding: 8px 6px;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+}
+
+.desktop-icon:active {
+  cursor: grabbing;
+}
+
+.desktop-icon:hover,
+.desktop-icon:focus-visible {
+  border-color: #202124;
+  background: rgba(255, 255, 255, 0.72);
+  outline: none;
+}
+
+.desktop-icon-tile {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
   border: 1px solid #202124;
   border-radius: 8px;
-  background: #fff8eb;
-  box-shadow: 6px 6px 0 #202124;
-  padding: 24px;
+  background: #ffffff;
+  box-shadow: 3px 3px 0 #202124;
 }
 
-.welcome-panel h1 {
-  margin: 0 0 8px;
-  font-size: 32px;
-  line-height: 1.15;
+.desktop-icon span:last-child {
+  max-width: 76px;
+  overflow-wrap: anywhere;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
 }
 
-.welcome-panel p {
+.window-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.desktop-window {
+  position: absolute;
+  display: flex;
+  min-width: 280px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #202124;
+  border-radius: 8px;
+  background: #fbfbf8;
+  box-shadow: 8px 8px 0 rgba(32, 33, 36, 0.9);
+  pointer-events: auto;
+}
+
+.desktop-window[data-focused="true"] {
+  box-shadow: 10px 10px 0 #202124;
+}
+
+.window-titlebar {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #202124;
+  background: #ffca3a;
+  cursor: grab;
+  padding: 8px 10px 8px 14px;
+  touch-action: none;
+  user-select: none;
+}
+
+.window-titlebar:active {
+  cursor: grabbing;
+}
+
+.window-titlebar div {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+}
+
+.window-titlebar h1 {
+  overflow: hidden;
   margin: 0;
-  color: #47413a;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.window-status {
+  width: 11px;
+  height: 11px;
+  flex: 0 0 auto;
+  border: 1px solid #202124;
+  border-radius: 50%;
+  background: #4fb286;
+}
+
+.window-close {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid #202124;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #202124;
+  cursor: pointer;
+  padding: 0;
+}
+
+.window-close:hover,
+.window-close:focus-visible {
+  background: #ff6b5f;
+  outline: none;
+}
+
+.window-body {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+}
+
+.app-content {
+  display: grid;
+  gap: 14px;
+}
+
+.app-content h2,
+.app-content h3,
+.app-content p {
+  margin: 0;
+}
+
+.app-content h2 {
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.app-content h3 {
+  font-size: 16px;
+}
+
+.app-content p {
+  color: #4a4f52;
+  line-height: 1.55;
+}
+
+.eyebrow {
+  color: #8a3ffc;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.project-grid section {
+  display: grid;
+  gap: 8px;
+  border: 1px solid #202124;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 14px;
+}
+
+.compact-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.5;
+}
+
+.app-link {
+  width: fit-content;
+  border: 1px solid #202124;
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 3px 3px 0 #202124;
+  color: #202124;
+  font-weight: 700;
+  padding: 8px 10px;
+  text-decoration: none;
+}
+
+.calculator-preview {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  max-width: 260px;
+}
+
+.calculator-preview output {
+  grid-column: 1 / -1;
+  min-height: 52px;
+  border: 1px solid #202124;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 28px;
+  line-height: 52px;
+  padding: 0 12px;
+  text-align: right;
+}
+
+.calculator-preview button {
+  min-height: 42px;
+  border: 1px solid #202124;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #202124;
+  font: inherit;
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .desktop-shell {
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
+    gap: 16px;
+    overflow: auto;
+    padding: 14px;
+  }
+
+  .desktop-icons {
+    position: relative;
+    inset: auto;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(56px, 1fr));
+    gap: 8px;
+    width: 100%;
+    pointer-events: auto;
+  }
+
+  .desktop-icon {
+    position: static;
+    width: 100%;
+    min-height: 78px;
+    padding: 6px 2px;
+  }
+
+  .desktop-icon-tile {
+    width: 42px;
+    height: 42px;
+  }
+
+  .desktop-icon span:last-child {
+    max-width: 100%;
+    font-size: 12px;
+  }
+
+  .window-layer {
+    position: static;
+    display: grid;
+    gap: 14px;
+    pointer-events: auto;
+  }
+
+  .desktop-window {
+    position: relative;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: min(66svh, 520px) !important;
+    max-width: 100%;
+    max-height: none;
+    box-shadow: 5px 5px 0 #202124;
+  }
+
+  .window-body {
+    padding: 16px;
+  }
+
+  .app-content h2 {
+    font-size: 24px;
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
 }
