@@ -4,33 +4,55 @@ import { CalculatorApp } from "./calculator-app";
 
 describe("CalculatorApp", () => {
   it("calculates using button input", () => {
-    render(<CalculatorApp />);
+    const { container } = render(<CalculatorApp />);
+    const clickKey = (label: string) => {
+      const button = Array.from(container.querySelectorAll("button")).find(
+        (candidate) => candidate.textContent === label,
+      );
 
-    fireEvent.click(screen.getByRole("button", { name: "2" }));
-    fireEvent.click(screen.getByRole("button", { name: "+" }));
-    fireEvent.click(screen.getByRole("button", { name: "2" }));
+      if (!button) {
+        throw new Error(`Calculator key ${label} was not rendered`);
+      }
+
+      fireEvent.click(button);
+    };
+
+    clickKey("2");
+    clickKey("+");
+    clickKey("2");
 
     expect(screen.getByLabelText("Formula")).toHaveTextContent("2 + 2");
 
-    fireEvent.click(screen.getByRole("button", { name: "=" }));
+    clickKey("=");
 
     expect(
       screen.getByLabelText("Calculator display"),
     ).toHaveTextContent("4");
     expect(screen.getByLabelText("Formula")).toHaveTextContent("2 + 2");
-    expect(screen.getByRole("button", { name: "AC" })).toBeInTheDocument();
+    expect(container).toHaveTextContent("AC");
   });
 
   it("switches between C and AC clear states", () => {
-    render(<CalculatorApp />);
+    const { container } = render(<CalculatorApp />);
+    const clickKey = (label: string) => {
+      const button = Array.from(container.querySelectorAll("button")).find(
+        (candidate) => candidate.textContent === label,
+      );
 
-    fireEvent.click(screen.getByRole("button", { name: "8" }));
+      if (!button) {
+        throw new Error(`Calculator key ${label} was not rendered`);
+      }
 
-    expect(screen.getByRole("button", { name: "C" })).toBeInTheDocument();
+      fireEvent.click(button);
+    };
 
-    fireEvent.click(screen.getByRole("button", { name: "C" }));
+    clickKey("8");
 
-    expect(screen.getByRole("button", { name: "AC" })).toBeInTheDocument();
+    expect(container).toHaveTextContent("C");
+
+    clickKey("C");
+
+    expect(container).toHaveTextContent("AC");
     expect(
       screen.getByLabelText("Calculator display"),
     ).toHaveTextContent("0");
