@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { CalculatorApp } from "./calculator/calculator-app";
 
+export { StoreApp } from "./store-app";
+
 type PortfolioSection = {
   title: string;
   items: string[];
@@ -266,7 +268,6 @@ const resumeEducation = [
     detail: "졸업",
   },
 ];
-
 export function PortfolioApp() {
   const [activePartId, setActivePartId] = useState(portfolioParts[0].id);
   const activeIndex = portfolioParts.findIndex((part) => part.id === activePartId);
@@ -343,21 +344,6 @@ export function PortfolioApp() {
         </span>
         <progress value={Math.max(0, activeIndex) + 1} max={portfolioParts.length} />
       </footer>
-    </div>
-  );
-}
-
-export function StoreApp() {
-  return (
-    <div className="app-content">
-      <p className="eyebrow">Store</p>
-      <h2>Mini storefront</h2>
-      <p>상품 목록과 장바구니 기능이 들어갈 쇼핑몰 프로그램입니다.</p>
-      <ul className="compact-list">
-        <li>정적 상품 데이터</li>
-        <li>비회원 장바구니</li>
-        <li>새로고침 후 상태 복원</li>
-      </ul>
     </div>
   );
 }
