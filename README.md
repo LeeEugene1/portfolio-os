@@ -15,6 +15,7 @@ docs/
   TEST_PLAN.md
   ORCHESTRATION.md
   AGENT_WORKFLOW.md
+  DEV_HARNESS.md
   plans/
 ```
 
@@ -42,4 +43,7 @@ docs/
 ```bash
 cat docs/ORCHESTRATION.md
 cat docs/AGENT_WORKFLOW.md
+cat docs/DEV_HARNESS.md
 ```
+
+이슈 PR을 올릴 때 사용자 실행 방식, 검증 방식, 배포/하네스 절차가 바뀌면 `README.md`도 함께 업데이트합니다.
