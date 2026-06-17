@@ -4,7 +4,7 @@ import { DesktopShell } from "./desktop-shell";
 
 describe("DesktopShell", () => {
   it("renders app icons and opens the Portfolio window by default", () => {
-    render(<DesktopShell />);
+    const { container } = render(<DesktopShell />);
 
     expect(
       screen.getByRole("main", { name: "Portfolio OS desktop" }),
@@ -23,9 +23,42 @@ describe("DesktopShell", () => {
       "Calculator",
     ]) {
       expect(
-        screen.getByRole("button", { name: `Open ${appName}` }),
+        container.querySelector(`[aria-label="Open ${appName}"]`),
       ).toBeInTheDocument();
     }
+    expect(
+      container.querySelector(`[aria-label="Terminal portfolio"]`),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Eugene Lee")).toBeInTheDocument();
+  });
+
+  it("shows terminal portfolio project details", () => {
+    render(<DesktopShell />);
+
+    fireEvent.click(screen.getByRole("button", { name: "2 thirtymall" }));
+
+    expect(screen.getByText("Thirtymall")).toBeInTheDocument();
+    expect(
+      screen.getByText("장바구니 응답 속도 1.5s에서 0.6s로 개선"),
+    ).toBeInTheDocument();
+  });
+
+  it("opens Resume as a document with PDF entry points", () => {
+    render(<DesktopShell />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Open Resume" }));
+
+    expect(
+      screen.getByRole("dialog", { name: "Resume" }),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText("Resume document")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "PDF 보기" })).toHaveAttribute(
+      "href",
+      "/resume-ko.pdf",
+    );
+    expect(
+      screen.getByRole("link", { name: "PDF 다운로드" }),
+    ).toHaveAttribute("download");
   });
 
   it("opens and closes app windows from desktop controls", () => {
@@ -140,7 +173,7 @@ describe("DesktopShell", () => {
       pointerId: 1,
     });
 
-    expect(portfolioWindow).toHaveStyle({ left: "310px", top: "108px" });
+    expect(portfolioWindow).toHaveStyle({ left: "270px", top: "88px" });
   });
 
   it("moves a desktop icon by dragging it", () => {

@@ -38,8 +38,8 @@ export const desktopApps: DesktopApp[] = [
     label: "Portfolio",
     title: "Portfolio",
     icon: BriefcaseBusiness,
-    defaultSize: { width: 680, height: 430 },
-    defaultPosition: { x: 270, y: 78 },
+    defaultSize: { width: 820, height: 560 },
+    defaultPosition: { x: 230, y: 58 },
     content: PortfolioApp,
   },
   {
@@ -56,8 +56,8 @@ export const desktopApps: DesktopApp[] = [
     label: "Resume",
     title: "Resume",
     icon: FileText,
-    defaultSize: { width: 460, height: 320 },
-    defaultPosition: { x: 520, y: 110 },
+    defaultSize: { width: 620, height: 540 },
+    defaultPosition: { x: 500, y: 100 },
     content: ResumeApp,
   },
   {
