@@ -43,7 +43,7 @@ describe("DesktopShell", () => {
     ).toBeInTheDocument();
   });
 
-  it("opens Resume as a document with PDF entry points", () => {
+  it("opens Resume as a document with the provided profile and career details", () => {
     render(<DesktopShell />);
 
     fireEvent.click(screen.getByRole("button", { name: "Open Resume" }));
@@ -52,13 +52,18 @@ describe("DesktopShell", () => {
       screen.getByRole("dialog", { name: "Resume" }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText("Resume document")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "PDF 보기" })).toHaveAttribute(
-      "href",
-      "/resume-ko.pdf",
+    expect(screen.getByRole("img", { name: "이유진 증명사진" })).toHaveAttribute(
+      "src",
+      expect.stringContaining("profile.png"),
     );
-    expect(
-      screen.getByRole("link", { name: "PDF 다운로드" }),
-    ).toHaveAttribute("download");
+    expect(screen.getByText("로그인 오류 88% 개선", { exact: false })).toBeInTheDocument();
+    expect(screen.getByText("핌아시아")).toBeInTheDocument();
+    expect(screen.getByText("iOS WKWebView", { exact: false })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Github" })).toHaveAttribute(
+      "href",
+      "https://github.com/LeeEugene1",
+    );
+    expect(screen.getByRole("button", { name: "인쇄" })).toBeInTheDocument();
   });
 
   it("opens and closes app windows from desktop controls", () => {
