@@ -261,6 +261,62 @@ a {
   text-decoration: none;
 }
 
+.contact-app {
+  gap: 18px;
+}
+
+.contact-profile {
+  display: grid;
+  border: 1px solid #202124;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 4px 4px 0 #202124;
+  padding: 18px;
+}
+
+.contact-profile h2 {
+  margin-bottom: 6px;
+}
+
+.contact-profile p {
+  color: #4a4f52;
+  font-weight: 700;
+}
+
+.contact-links {
+  display: grid;
+  gap: 10px;
+}
+
+.contact-link {
+  display: grid;
+  gap: 4px;
+  border: 1px solid #202124;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #202124;
+  padding: 12px 14px;
+  text-decoration: none;
+}
+
+.contact-link:hover,
+.contact-link:focus-visible {
+  background: #fffbeb;
+  outline: none;
+}
+
+.contact-link span {
+  color: #6b7175;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.contact-link strong {
+  overflow-wrap: anywhere;
+  font-size: 16px;
+}
+
 @media (max-width: 720px) {
   .desktop-shell {
     display: flex;

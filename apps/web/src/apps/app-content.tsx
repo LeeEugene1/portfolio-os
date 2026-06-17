@@ -53,13 +53,42 @@ export function ResumeApp() {
 
 export function ContactApp() {
   return (
-    <div className="app-content">
+    <div className="app-content contact-app">
       <p className="eyebrow">Contact</p>
-      <h2>Contact channels</h2>
-      <p>이메일과 외부 프로필 링크를 제공하는 연락 프로그램입니다.</p>
-      <a className="app-link" href="mailto:hello@example.com">
-        hello@example.com
-      </a>
+      <section className="contact-profile" aria-label="Contact profile">
+        <div>
+          <h2>이유진</h2>
+          <p>프론트엔드개발자</p>
+        </div>
+      </section>
+      <div className="contact-links" aria-label="Contact channels">
+        <a className="contact-link" href="mailto:uwm1004@gmail.com">
+          <span>Email</span>
+          <strong>uwm1004@gmail.com</strong>
+        </a>
+        <a className="contact-link" href="tel:01056526287">
+          <span>Phone</span>
+          <strong>010 5652 6287</strong>
+        </a>
+        <a
+          className="contact-link"
+          href="https://github.com/LeeEugene1"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <span>GitHub</span>
+          <strong>github.com/LeeEugene1</strong>
+        </a>
+        <a
+          className="contact-link"
+          href="https://dubaiyu.tistory.com/"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <span>Blog</span>
+          <strong>dubaiyu.tistory.com</strong>
+        </a>
+      </div>
     </div>
   );
 }

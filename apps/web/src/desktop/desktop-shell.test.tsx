@@ -86,6 +86,32 @@ describe("DesktopShell", () => {
     );
   });
 
+  it("opens the Contact app with email, phone, and profile links", () => {
+    render(<DesktopShell />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Open Contact" }));
+
+    expect(screen.getByRole("dialog", { name: "Contact" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "이유진" })).toBeInTheDocument();
+    expect(screen.getByText("프론트엔드개발자")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Email/i })).toHaveAttribute(
+      "href",
+      "mailto:uwm1004@gmail.com",
+    );
+    expect(screen.getByRole("link", { name: /Phone/i })).toHaveAttribute(
+      "href",
+      "tel:01056526287",
+    );
+    expect(screen.getByRole("link", { name: /GitHub/i })).toHaveAttribute(
+      "href",
+      "https://github.com/LeeEugene1",
+    );
+    expect(screen.getByRole("link", { name: /Blog/i })).toHaveAttribute(
+      "href",
+      "https://dubaiyu.tistory.com/",
+    );
+  });
+
   it("moves a window by dragging its titlebar", () => {
     render(<DesktopShell />);
 
