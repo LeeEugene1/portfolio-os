@@ -42,3 +42,38 @@ jobs:
 
       - name: Run full verification
         run: npm run verify:full
+
+  deploy:
+    name: Deploy web app
+    runs-on: ubuntu-latest
+    needs: verify
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    defaults:
+      run:
+        working-directory: apps/web
+    env:
+      VERCEL_ORG_ID: team_4gu3kD9PR8DXJSrsSaODPMVK
+      VERCEL_PROJECT_ID: prj_XBlOnx80lz8lwCRrxGnlYKmQLuaP
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Pull Vercel environment
+        run: npx --yes vercel@latest pull --yes --environment=production --token="${{ secrets.VERCEL_TOKEN }}"
+
+      - name: Build Vercel output
+        run: npx --yes vercel@latest build --prod --token="${{ secrets.VERCEL_TOKEN }}"
+
+      - name: Deploy to Vercel
+        run: npx --yes vercel@latest deploy --prebuilt --prod --token="${{ secrets.VERCEL_TOKEN }}"
