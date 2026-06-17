@@ -72,6 +72,40 @@ plan:blocked
 - 문서 최적화, CI 수정처럼 다른 브랜치가 동시에 진행 중이면, 이슈 브랜치를 최신 `main`에 rebase 또는 merge한 뒤 충돌과 검증 결과를 확인합니다.
 - 실수로 다른 브랜치에 커밋한 경우에는 해당 커밋을 올바른 이슈 브랜치로 먼저 옮기고, 원래 브랜치 포인터를 원격 기준 상태로 정리한 뒤 작업을 계속합니다.
 
+## main 동기화 게이트
+
+병렬로 여러 이슈를 처리할 때는 각 이슈 브랜치가 오래된 `main`을 기준으로 작업하지 않도록 아래 시점에 최신 `origin/main` 포함 여부를 확인합니다.
+
+- 브랜치 생성 직전.
+- 구현 시작 직전.
+- 커밋 직전.
+- push 직전.
+- PR 생성 또는 PR 업데이트 직전.
+
+확인 기준:
+
+```bash
+git fetch origin main
+git status --short
+git merge-base --is-ancestor origin/main HEAD
+```
+
+판단 규칙:
+
+- `git status --short`가 비어 있지 않으면 rebase 전에 변경 범위를 먼저 확인합니다.
+- `git merge-base --is-ancestor origin/main HEAD`가 성공하면 현재 브랜치는 최신 `origin/main`을 포함합니다.
+- 실패하면 현재 브랜치가 최신 `origin/main`을 포함하지 않으므로, 작업 브랜치를 `origin/main` 위로 rebase합니다.
+
+권장 rebase:
+
+```bash
+git rebase origin/main
+```
+
+rebase 중 충돌이 발생하면 임의로 해결하지 않고 충돌 파일, 충돌 원인, 선택지를 사용자에게 보고합니다. rebase 후에는 해당 이슈의 검증 명령을 다시 실행하고, PR 본문 또는 최종 응답에 rebase 여부와 검증 결과를 남깁니다.
+
+이 게이트는 Git 히스토리와 PR 기준 브랜치 동기화를 제어하기 위한 절차입니다. 기능 코드가 아니라 `AGENT_WORKFLOW.md`, Git 명령, GitHub PR 상태, CI 검증으로 관리합니다.
+
 ## 브랜치와 PR 검수 규칙
 
 - 모든 이슈 작업은 별도 브랜치에서 진행합니다.
