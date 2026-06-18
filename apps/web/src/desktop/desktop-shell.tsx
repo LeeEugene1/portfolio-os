@@ -82,7 +82,6 @@ const initialWindows: WindowState[] = [createWindowState("portfolio", 1, 0)];
 const iconOrigin = 24;
 const iconStep = 102;
 const iconSize = 88;
-const iconGap = 5;
 const initialIconPositions = Object.fromEntries(
   desktopApps.map((app, index) => [
     app.id,
@@ -95,67 +94,6 @@ function clampIconPosition(x: number, y: number) {
     x: Math.max(0, Math.min(x, window.innerWidth - iconSize)),
     y: Math.max(0, Math.min(y, window.innerHeight - iconSize)),
   };
-}
-
-function doIconsOverlap(first: IconPosition, second: IconPosition) {
-  return (
-    Math.abs(first.x - second.x) < iconSize + iconGap &&
-    Math.abs(first.y - second.y) < iconSize + iconGap
-  );
-}
-
-function findOpenIconPosition(
-  appId: AppId,
-  nextPosition: IconPosition,
-  currentPositions: Record<AppId, IconPosition>,
-) {
-  const basePosition = clampIconPosition(nextPosition.x, nextPosition.y);
-  const isOpen = Object.entries(currentPositions).every(
-    ([currentAppId, currentPosition]) =>
-      currentAppId === appId || !doIconsOverlap(basePosition, currentPosition),
-  );
-
-  if (isOpen) {
-    return basePosition;
-  }
-
-  const step = iconSize + iconGap;
-  const candidates: Array<IconPosition & { distance: number }> = [];
-
-  for (let radius = step; radius <= step * 5; radius += step) {
-    for (let dx = -radius; dx <= radius; dx += step) {
-      for (let dy = -radius; dy <= radius; dy += step) {
-        if (Math.abs(dx) !== radius && Math.abs(dy) !== radius) {
-          continue;
-        }
-
-        const candidate = clampIconPosition(
-          basePosition.x + dx,
-          basePosition.y + dy,
-        );
-        const overlaps = Object.entries(currentPositions).some(
-          ([currentAppId, currentPosition]) =>
-            currentAppId !== appId && doIconsOverlap(candidate, currentPosition),
-        );
-
-        if (!overlaps) {
-          candidates.push({
-            ...candidate,
-            distance: Math.abs(dx) + Math.abs(dy),
-          });
-        }
-      }
-    }
-
-    if (candidates.length > 0) {
-      break;
-    }
-  }
-
-  return (
-    candidates.sort((first, second) => first.distance - second.distance)[0] ??
-    basePosition
-  );
 }
 
 function isMobileViewport() {
@@ -474,13 +412,9 @@ export function DesktopShell() {
 
       return {
         ...currentPositions,
-        [activeId]: findOpenIconPosition(
-          activeId,
-          {
-            x: currentPosition.x + event.delta.x,
-            y: currentPosition.y + event.delta.y,
-          },
-          currentPositions,
+        [activeId]: clampIconPosition(
+          currentPosition.x + event.delta.x,
+          currentPosition.y + event.delta.y,
         ),
       };
     });
