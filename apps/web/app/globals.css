@@ -147,11 +147,12 @@ a {
 }
 
 .desktop-window[data-maximized="true"] {
-  inset: 16px !important;
+  inset: 0 !important;
   width: auto !important;
   height: auto !important;
   max-width: none;
   max-height: none;
+  border-radius: 0;
 }
 
 .window-titlebar {
@@ -270,6 +271,14 @@ a {
   transform: translate(-50%, calc(100% + 10px));
 }
 
+.desktop-shell:has(.desktop-window[data-maximized="true"]) .window-layer {
+  inset: 0;
+}
+
+.desktop-shell:has(.desktop-window[data-maximized="true"]) .dock-zone {
+  pointer-events: none;
+}
+
 .desktop-shell:has(.desktop-window[data-maximized="true"])
   .dock-zone:hover
   .app-dock,
@@ -324,10 +333,6 @@ a {
 
 .dock-icon[data-minimized="true"]::after {
   background: #f6c85f;
-}
-
-.mobile-window-tabs {
-  display: none;
 }
 
 .window-body {
@@ -1397,7 +1402,7 @@ button.app-link {
 
   .desktop-window[data-maximized="true"] {
     position: fixed;
-    inset: 48px 0 0 !important;
+    inset: 0 !important;
     width: 100% !important;
     height: auto !important;
     margin: 0;
@@ -1417,7 +1422,7 @@ button.app-link {
   }
 
   .window-layer[data-has-maximized="true"] {
-    min-height: calc(100svh - 48px);
+    min-height: 100svh;
     padding-top: 0;
   }
 
@@ -1445,91 +1450,8 @@ button.app-link {
     display: none;
   }
 
-  .mobile-window-tabs {
-    position: fixed;
-    inset: 0 0 auto;
-    z-index: 220;
-    display: none;
-    gap: 0;
-    overflow-x: auto;
-    border-bottom: 1px solid #202124;
-    background: rgba(238, 243, 244, 0.96);
-    padding: 0 6px;
-  }
-
-  .desktop-shell:has(.desktop-window[data-maximized="true"])
-    .mobile-window-tabs {
-    display: flex;
-  }
-
   .desktop-shell:has(.desktop-window[data-maximized="true"]) .desktop-icons {
     display: none;
-  }
-
-  .mobile-window-tab {
-    position: relative;
-    display: inline-flex;
-    min-width: 128px;
-    height: 42px;
-    align-items: center;
-    gap: 8px;
-    border: 1px solid #202124;
-    border-bottom: 0;
-    border-radius: 0;
-    background: rgba(255, 255, 255, 0.76);
-    color: #202124;
-    cursor: pointer;
-    font: inherit;
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 1;
-    padding: 0 12px;
-  }
-
-  .mobile-window-tab:hover,
-  .mobile-window-tab:focus-visible {
-    background: #ffffff;
-    outline: none;
-  }
-
-  .mobile-window-tab[data-focused="true"] {
-    background: #ffffff;
-    color: #202124;
-    box-shadow: inset 0 -3px 0 #202124;
-  }
-
-  .mobile-window-tab svg {
-    width: 18px;
-    height: 18px;
-    flex: 0 0 auto;
-    border-radius: 3px;
-    background: #d7dde2;
-    color: #202124;
-    padding: 2px;
-  }
-
-  .mobile-window-tab span:last-child {
-    min-width: 0;
-    max-width: 82px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .mobile-tab-status {
-    position: absolute;
-    right: 8px;
-    top: 7px;
-    display: block;
-    width: 8px;
-    height: 8px;
-    border: 1px solid #202124;
-    border-radius: 999px;
-    background: #cfd6d9;
-  }
-
-  .mobile-window-tab[data-running="true"] .mobile-tab-status {
-    background: #4fb286;
   }
 
   .desktop-window[data-app-id="calculator"] {

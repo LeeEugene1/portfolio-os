@@ -268,24 +268,16 @@ describe("DesktopShell", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders mobile tabs with focused and running state", () => {
+  it("does not render mobile tabs after opening multiple apps", () => {
     render(<DesktopShell />);
 
     fireEvent.click(screen.getByRole("button", { name: "Open Store" }));
 
     expect(
-      screen.getByRole("navigation", { name: "Mobile applications" }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Mobile tab Store" })).toHaveAttribute(
-      "data-running",
-      "true",
-    );
-    expect(screen.getByRole("button", { name: "Mobile tab Store" })).toHaveAttribute(
-      "data-focused",
-      "true",
-    );
+      screen.queryByRole("navigation", { name: "Mobile applications" }),
+    ).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Mobile tab Contact" }),
-    ).toHaveAttribute("data-running", "false");
+      screen.queryByRole("button", { name: "Mobile tab Store" }),
+    ).not.toBeInTheDocument();
   });
 });

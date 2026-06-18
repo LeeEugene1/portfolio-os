@@ -30,7 +30,7 @@ test("minimizes and restores windows from the dock", async ({ page }) => {
   await expect(page.getByRole("dialog", { name: "Store" })).toBeVisible();
 });
 
-test("hides the dock when a window is maximized on mobile", async ({
+test("fills the screen when a window is maximized on mobile", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -44,8 +44,13 @@ test("hides the dock when a window is maximized on mobile", async ({
   ).toBeHidden();
   await expect(
     page.getByRole("navigation", { name: "Mobile applications" }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Mobile tab Portfolio" }),
-  ).toBeVisible();
+  ).toHaveCount(0);
+  const box = await page.getByRole("dialog", { name: "Portfolio" }).boundingBox();
+
+  expect(box).toMatchObject({
+    x: 0,
+    y: 0,
+    width: 390,
+    height: 844,
+  });
 });

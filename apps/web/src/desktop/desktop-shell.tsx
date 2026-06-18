@@ -82,7 +82,7 @@ const initialWindows: WindowState[] = [createWindowState("portfolio", 1, 0)];
 const iconOrigin = 24;
 const iconStep = 102;
 const iconSize = 88;
-const iconGap = 8;
+const iconGap = 5;
 const initialIconPositions = Object.fromEntries(
   desktopApps.map((app, index) => [
     app.id,
@@ -552,7 +552,6 @@ export function DesktopShell() {
                   ? "10px 10px 0 #202124"
                   : "8px 8px 0 rgba(32, 33, 36, 0.9)",
               }}
-              layout
               onClick={() => {
                 if (suppressedWindowClickAppId === app.id) {
                   setSuppressedWindowClickAppId(null);
@@ -648,30 +647,6 @@ export function DesktopShell() {
           );
         })}
       </section>
-
-      <nav className="mobile-window-tabs" aria-label="Mobile applications">
-        {desktopApps.map((app) => {
-          const Icon = app.icon;
-          const isRunning = runningAppIds.has(app.id);
-          const isFocused = focusedAppId === app.id;
-
-          return (
-            <button
-              aria-label={`Mobile tab ${app.label}`}
-              className="mobile-window-tab"
-              data-focused={isFocused}
-              data-running={isRunning}
-              key={app.id}
-              onClick={() => openApp(app.id, { expandOnMobile: true })}
-              type="button"
-            >
-              <span className="mobile-tab-status" aria-hidden="true" />
-              <Icon size={15} strokeWidth={1.8} />
-              <span>{app.label}</span>
-            </button>
-          );
-        })}
-      </nav>
 
       <div className="dock-zone">
         <nav className="app-dock" aria-label="Running applications">
