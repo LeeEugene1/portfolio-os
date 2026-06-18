@@ -1,10 +1,21 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:portfolio_os_mobile_shell/main.dart';
 
 void main() {
-  testWidgets('renders the shell placeholder', (tester) async {
-    await tester.pumpWidget(const PortfolioOsShellApp());
+  testWidgets('renders the WebView shell host', (tester) async {
+    await tester.pumpWidget(
+      PortfolioOsShellApp(
+        webViewBuilder: (_) => const SizedBox(
+          key: Key('portfolio-webview-placeholder'),
+        ),
+      ),
+    );
 
-    expect(find.text('Portfolio OS'), findsOneWidget);
+    expect(find.byType(ShellHome), findsOneWidget);
+    expect(
+      find.byKey(const Key('portfolio-webview-placeholder')),
+      findsOneWidget,
+    );
   });
 }
