@@ -7,14 +7,24 @@ import {
   getStoredCartSummary,
   useCartStore,
 } from "@/stores/cart-store";
-import { StoreApp } from "./store-app";
 import {
   addCartItem,
   getCartSummary,
   parseStoredCart,
   removeCartItem,
   updateCartItemQuantity,
-} from "./store-cart";
+} from "@/stores/cart-logic";
+import { StoreApp } from "./store-app";
+
+function resetCartStore() {
+  window.localStorage.clear();
+  useCartStore.setState({
+    items: [],
+    selectedProductId: null,
+    selectedQuantity: 1,
+    view: "products",
+  });
+}
 
 describe("store cart logic", () => {
   it("adds products and calculates total quantity and price", () => {
@@ -78,8 +88,7 @@ describe("store cart logic", () => {
 
 describe("cart zustand store", () => {
   beforeEach(() => {
-    window.localStorage.clear();
-    useCartStore.setState({ items: [] });
+    resetCartStore();
   });
 
   it("persists cart items and exposes summary helpers", async () => {
@@ -96,6 +105,51 @@ describe("cart zustand store", () => {
         firstProduct.id,
       );
     });
+  });
+
+  it("keeps view and option state out of persisted cart storage", async () => {
+    const [firstProduct] = products;
+
+    useCartStore.getState().openCheckout();
+    useCartStore.getState().openOptionSheet(firstProduct.id);
+    useCartStore.getState().setSelectedQuantity(3);
+    useCartStore.getState().addItem(firstProduct.id, 1);
+
+    await waitFor(() => {
+      expect(window.localStorage.getItem(cartStorageKey)).toContain(
+        firstProduct.id,
+      );
+    });
+
+    const storedValue = window.localStorage.getItem(cartStorageKey);
+
+    expect(storedValue).toContain("items");
+    expect(storedValue).not.toContain("checkout");
+    expect(storedValue).not.toContain("selectedProductId");
+    expect(storedValue).not.toContain("selectedQuantity");
+  });
+
+  it("moves store view and option selection through zustand actions", () => {
+    const [firstProduct] = products;
+
+    useCartStore.getState().openCart();
+    expect(useCartStore.getState().view).toBe("cart");
+
+    useCartStore.getState().openCheckout();
+    expect(useCartStore.getState().view).toBe("checkout");
+
+    useCartStore.getState().openProducts();
+    expect(useCartStore.getState().view).toBe("products");
+
+    useCartStore.getState().openOptionSheet(firstProduct.id);
+    useCartStore.getState().setSelectedQuantity(4);
+    useCartStore.getState().addSelectedProduct();
+
+    expect(useCartStore.getState().selectedProductId).toBeNull();
+    expect(useCartStore.getState().selectedQuantity).toBe(1);
+    expect(useCartStore.getState().items).toEqual([
+      { productId: firstProduct.id, quantity: 4 },
+    ]);
   });
 
   it("updates, removes, and clears cart items through store actions", () => {
@@ -125,8 +179,7 @@ describe("cart zustand store", () => {
 
 describe("StoreApp", () => {
   beforeEach(() => {
-    window.localStorage.clear();
-    useCartStore.setState({ items: [] });
+    resetCartStore();
   });
 
   it("opens product option selector and adds selected quantity to cart", async () => {
@@ -168,6 +221,9 @@ describe("StoreApp", () => {
 
     useCartStore.setState({
       items: [{ productId: products[1].id, quantity: 1 }],
+      selectedProductId: null,
+      selectedQuantity: 1,
+      view: "products",
     });
 
     render(<StoreApp />);
@@ -198,6 +254,9 @@ describe("StoreApp", () => {
 
     useCartStore.setState({
       items: [{ productId: products[0].id, quantity: 2 }],
+      selectedProductId: null,
+      selectedQuantity: 1,
+      view: "products",
     });
 
     render(<StoreApp />);
