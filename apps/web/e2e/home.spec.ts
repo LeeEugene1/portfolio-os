@@ -42,4 +42,10 @@ test("hides the dock when a window is maximized on mobile", async ({
   await expect(
     page.getByRole("navigation", { name: "Running applications" }),
   ).toBeHidden();
+  await expect(
+    page.getByRole("navigation", { name: "Mobile applications" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Mobile tab Portfolio" }),
+  ).toBeVisible();
 });
