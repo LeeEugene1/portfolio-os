@@ -11,8 +11,9 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+import { motion } from "framer-motion";
 import { Maximize2, Minimize2, Minus, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { type CSSProperties, useMemo, useState } from "react";
 import {
   appsById,
   desktopApps,
@@ -25,6 +26,7 @@ type WindowState = {
   zIndex: number;
   x: number;
   y: number;
+  openOrder: number;
   isMaximized: boolean;
   isMinimized: boolean;
 };
@@ -41,14 +43,20 @@ type IconPosition = {
   y: number;
 };
 
-function createWindowState(appId: AppId, zIndex: number): WindowState {
+function createWindowState(
+  appId: AppId,
+  zIndex: number,
+  openOrder: number,
+): WindowState {
   const app = appsById.get(appId);
+  const openOffset = openOrder * 10;
 
   return {
     appId,
     zIndex,
-    x: app?.defaultPosition.x ?? 0,
-    y: app?.defaultPosition.y ?? 0,
+    x: (app?.defaultPosition.x ?? 0) + openOffset,
+    y: (app?.defaultPosition.y ?? 0) + openOffset,
+    openOrder,
     isMaximized: false,
     isMinimized: false,
   };
@@ -61,10 +69,11 @@ function clampWindowPosition(x: number, y: number) {
   };
 }
 
-const initialWindows: WindowState[] = [createWindowState("portfolio", 1)];
+const initialWindows: WindowState[] = [createWindowState("portfolio", 1, 0)];
 const iconOrigin = 24;
 const iconStep = 102;
 const iconSize = 88;
+const iconGap = 8;
 const initialIconPositions = Object.fromEntries(
   desktopApps.map((app, index) => [
     app.id,
@@ -77,6 +86,71 @@ function clampIconPosition(x: number, y: number) {
     x: Math.max(0, Math.min(x, window.innerWidth - iconSize)),
     y: Math.max(0, Math.min(y, window.innerHeight - iconSize)),
   };
+}
+
+function doIconsOverlap(first: IconPosition, second: IconPosition) {
+  return (
+    Math.abs(first.x - second.x) < iconSize + iconGap &&
+    Math.abs(first.y - second.y) < iconSize + iconGap
+  );
+}
+
+function findOpenIconPosition(
+  appId: AppId,
+  nextPosition: IconPosition,
+  currentPositions: Record<AppId, IconPosition>,
+) {
+  const basePosition = clampIconPosition(nextPosition.x, nextPosition.y);
+  const isOpen = Object.entries(currentPositions).every(
+    ([currentAppId, currentPosition]) =>
+      currentAppId === appId || !doIconsOverlap(basePosition, currentPosition),
+  );
+
+  if (isOpen) {
+    return basePosition;
+  }
+
+  const step = iconSize + iconGap;
+  const candidates: Array<IconPosition & { distance: number }> = [];
+
+  for (let radius = step; radius <= step * 5; radius += step) {
+    for (let dx = -radius; dx <= radius; dx += step) {
+      for (let dy = -radius; dy <= radius; dy += step) {
+        if (Math.abs(dx) !== radius && Math.abs(dy) !== radius) {
+          continue;
+        }
+
+        const candidate = clampIconPosition(
+          basePosition.x + dx,
+          basePosition.y + dy,
+        );
+        const overlaps = Object.entries(currentPositions).some(
+          ([currentAppId, currentPosition]) =>
+            currentAppId !== appId && doIconsOverlap(candidate, currentPosition),
+        );
+
+        if (!overlaps) {
+          candidates.push({
+            ...candidate,
+            distance: Math.abs(dx) + Math.abs(dy),
+          });
+        }
+      }
+    }
+
+    if (candidates.length > 0) {
+      break;
+    }
+  }
+
+  return (
+    candidates.sort((first, second) => first.distance - second.distance)[0] ??
+    basePosition
+  );
+}
+
+function isMobileViewport() {
+  return window.matchMedia("(max-width: 720px)").matches;
 }
 
 function DesktopIcon({
@@ -139,6 +213,7 @@ export function DesktopShell() {
   const [nextZIndex, setNextZIndex] = useState(2);
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [activeIconId, setActiveIconId] = useState<AppId | null>(null);
+  const [nextOpenOrder, setNextOpenOrder] = useState(1);
   const [suppressedClickAppId, setSuppressedClickAppId] =
     useState<AppId | null>(null);
   const sensors = useSensors(
@@ -168,6 +243,9 @@ export function DesktopShell() {
     );
   }, [visibleWindows]);
   const activeIcon = activeIconId ? appsById.get(activeIconId) : undefined;
+  const hasMaximizedWindow = visibleWindows.some(
+    (windowState) => windowState.isMaximized,
+  );
   const runningAppIds = useMemo(
     () => new Set(windows.map((windowState) => windowState.appId)),
     [windows],
@@ -193,19 +271,56 @@ export function DesktopShell() {
     setNextZIndex((current) => current + 1);
   }
 
-  function openApp(appId: AppId) {
+  function focusOrExpandWindow(appId: AppId) {
+    const shouldExpand = isMobileViewport();
+
+    setWindows((currentWindows) =>
+      currentWindows.map((windowState) =>
+        windowState.appId === appId
+          ? {
+              ...windowState,
+              zIndex: nextZIndex,
+              isMaximized: shouldExpand ? true : windowState.isMaximized,
+              isMinimized: false,
+            }
+          : shouldExpand
+            ? { ...windowState, isMaximized: false }
+            : windowState,
+      ),
+    );
+    setNextZIndex((current) => current + 1);
+  }
+
+  function openApp(appId: AppId, options?: { expandOnMobile?: boolean }) {
+    const shouldExpand = Boolean(options?.expandOnMobile && isMobileViewport());
+
     setWindows((currentWindows) => {
       if (currentWindows.some((windowState) => windowState.appId === appId)) {
         return currentWindows.map((windowState) =>
           windowState.appId === appId
-            ? { ...windowState, zIndex: nextZIndex, isMinimized: false }
-            : windowState,
+            ? {
+                ...windowState,
+                zIndex: nextZIndex,
+                isMaximized: shouldExpand ? true : windowState.isMaximized,
+                isMinimized: false,
+              }
+            : shouldExpand
+              ? { ...windowState, isMaximized: false }
+              : windowState,
         );
       }
 
-      return [...currentWindows, createWindowState(appId, nextZIndex)];
+      const nextWindow = createWindowState(appId, nextZIndex, nextOpenOrder);
+
+      return [
+        ...currentWindows.map((windowState) =>
+          shouldExpand ? { ...windowState, isMaximized: false } : windowState,
+        ),
+        { ...nextWindow, isMaximized: shouldExpand },
+      ];
     });
     setNextZIndex((current) => current + 1);
+    setNextOpenOrder((current) => current + 1);
   }
 
   function closeApp(appId: AppId) {
@@ -307,9 +422,13 @@ export function DesktopShell() {
 
       return {
         ...currentPositions,
-        [activeId]: clampIconPosition(
-          currentPosition.x + event.delta.x,
-          currentPosition.y + event.delta.y,
+        [activeId]: findOpenIconPosition(
+          activeId,
+          {
+            x: currentPosition.x + event.delta.x,
+            y: currentPosition.y + event.delta.y,
+          },
+          currentPositions,
         ),
       };
     });
@@ -346,8 +465,12 @@ export function DesktopShell() {
         </DragOverlay>
       </DndContext>
 
-      <section className="window-layer" aria-label="Open windows">
-        {orderedWindows.map((windowState) => {
+      <section
+        className="window-layer"
+        aria-label="Open windows"
+        data-has-maximized={hasMaximizedWindow}
+      >
+        {orderedWindows.map((windowState, stackIndex) => {
           const app = appsById.get(windowState.appId);
 
           if (!app) {
@@ -359,14 +482,25 @@ export function DesktopShell() {
           const isFocused = focusedAppId === app.id;
 
           return (
-            <article
+            <motion.article
               aria-labelledby={titleId}
               className="desktop-window"
               data-app-id={app.id}
               data-focused={isFocused}
               data-maximized={windowState.isMaximized}
+              data-stack-index={stackIndex}
+              initial={{ opacity: 0, scale: 0.96, y: 16 }}
               key={app.id}
-              onPointerDown={() => focusWindow(app.id)}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                boxShadow: isFocused
+                  ? "10px 10px 0 #202124"
+                  : "8px 8px 0 rgba(32, 33, 36, 0.9)",
+              }}
+              layout
+              onPointerDown={() => focusOrExpandWindow(app.id)}
               role="dialog"
               style={{
                 height: windowState.isMaximized ? undefined : app.defaultSize.height,
@@ -374,7 +508,11 @@ export function DesktopShell() {
                 top: windowState.isMaximized ? undefined : windowState.y,
                 width: windowState.isMaximized ? undefined : app.defaultSize.width,
                 zIndex: windowState.zIndex,
-              }}
+                "--stack-index": stackIndex,
+                "--stack-offset": `${stackIndex * 10}px`,
+                "--stack-lift": `${stackIndex * -18}px`,
+              } as CSSProperties}
+              transition={{ duration: 0.18, ease: "easeOut" }}
             >
               <header
                 className="window-titlebar"
@@ -430,10 +568,34 @@ export function DesktopShell() {
               <div className="window-body">
                 <Content />
               </div>
-            </article>
+            </motion.article>
           );
         })}
       </section>
+
+      <nav className="mobile-window-tabs" aria-label="Mobile applications">
+        {desktopApps.map((app) => {
+          const Icon = app.icon;
+          const isRunning = runningAppIds.has(app.id);
+          const isFocused = focusedAppId === app.id;
+
+          return (
+            <button
+              aria-label={`Mobile tab ${app.label}`}
+              className="mobile-window-tab"
+              data-focused={isFocused}
+              data-running={isRunning}
+              key={app.id}
+              onClick={() => openApp(app.id, { expandOnMobile: true })}
+              type="button"
+            >
+              <span className="mobile-tab-status" aria-hidden="true" />
+              <Icon size={15} strokeWidth={1.8} />
+              <span>{app.label}</span>
+            </button>
+          );
+        })}
+      </nav>
 
       <div className="dock-zone">
         <nav className="app-dock" aria-label="Running applications">
