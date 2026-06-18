@@ -2,6 +2,8 @@
 
 ## 프로젝트 소개
 
+<img width="1433" height="683" alt="Image" src="https://github.com/user-attachments/assets/290f560c-1609-42c0-b076-8c68ebab61ab" />
+
 portfolio-os는 운영체제(OS) UI 컨셉으로 만든 인터랙티브 포트폴리오입니다.
 
 일반적인 이력서 페이지처럼 위에서 아래로 읽는 방식이 아니라, 데스크톱의 앱, 창, 폴더를 열듯이 탐색합니다. 사용자는 Portfolio, Resume, Store, Contact, Calculator 앱을 직접 실행하면서 개발자의 경험과 구현 역량을 확인할 수 있습니다.
