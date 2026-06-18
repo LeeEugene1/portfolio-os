@@ -37,3 +37,23 @@ flutter analyze
 flutter test
 flutter build apk
 ```
+
+## APK Outputs
+
+After a local build, APK files are written under:
+
+```txt
+apps/mobile-shell/build/app/outputs/flutter-apk/
+```
+
+Debug APK for quick device testing:
+
+```txt
+/Users/yujin/portfolio-os-worktrees/22-flutter-webview/apps/mobile-shell/build/app/outputs/flutter-apk/app-debug.apk
+```
+
+Release APK for sideload demo:
+
+```txt
+/Users/yujin/portfolio-os-worktrees/22-flutter-webview/apps/mobile-shell/build/app/outputs/flutter-apk/app-release.apk
+```
