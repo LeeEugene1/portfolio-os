@@ -13,7 +13,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { motion } from "framer-motion";
 import { Maximize2, Minimize2, Minus, X } from "lucide-react";
-import { type CSSProperties, useMemo, useState } from "react";
+import { type CSSProperties, useMemo, useRef, useState } from "react";
 import {
   appsById,
   desktopApps,
@@ -36,6 +36,9 @@ type DragState = {
   appId: AppId;
   offsetX: number;
   offsetY: number;
+  startX: number;
+  startY: number;
+  hasMoved: boolean;
 };
 
 type IconPosition = {
@@ -216,6 +219,9 @@ export function DesktopShell() {
   const [nextOpenOrder, setNextOpenOrder] = useState(1);
   const [suppressedClickAppId, setSuppressedClickAppId] =
     useState<AppId | null>(null);
+  const [suppressedWindowClickAppId, setSuppressedWindowClickAppId] =
+    useState<AppId | null>(null);
+  const draggedWindowAppIdRef = useRef<AppId | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -360,18 +366,27 @@ export function DesktopShell() {
     event: React.PointerEvent<HTMLElement>,
     windowState: WindowState,
   ) {
+    event.stopPropagation();
+
     if (windowState.isMaximized) {
-      focusWindow(appId);
+      if (!isMobileViewport()) {
+        focusWindow(appId);
+      }
       return;
     }
 
     event.currentTarget.setPointerCapture?.(event.pointerId);
-    focusWindow(appId);
+    if (!isMobileViewport()) {
+      focusWindow(appId);
+    }
     setDragState({
       kind: "window",
       appId,
       offsetX: event.clientX - windowState.x,
       offsetY: event.clientY - windowState.y,
+      startX: event.clientX,
+      startY: event.clientY,
+      hasMoved: false,
     });
   }
 
@@ -380,11 +395,19 @@ export function DesktopShell() {
       return;
     }
 
+    const hasMoved =
+      dragState.hasMoved ||
+      Math.abs(event.clientX - dragState.startX) > 4 ||
+      Math.abs(event.clientY - dragState.startY) > 4;
     const nextPosition = clampWindowPosition(
       event.clientX - dragState.offsetX,
       event.clientY - dragState.offsetY,
     );
 
+    if (hasMoved !== dragState.hasMoved) {
+      draggedWindowAppIdRef.current = dragState.appId;
+      setDragState({ ...dragState, hasMoved });
+    }
     setWindows((currentWindows) =>
       currentWindows.map((windowState) =>
         windowState.appId === dragState.appId
@@ -399,6 +422,10 @@ export function DesktopShell() {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
 
+    if (draggedWindowAppIdRef.current) {
+      setSuppressedWindowClickAppId(draggedWindowAppIdRef.current);
+      draggedWindowAppIdRef.current = null;
+    }
     setDragState(null);
   }
 
@@ -500,7 +527,17 @@ export function DesktopShell() {
                   : "8px 8px 0 rgba(32, 33, 36, 0.9)",
               }}
               layout
-              onPointerDown={() => focusOrExpandWindow(app.id)}
+              onClick={() => {
+                if (suppressedWindowClickAppId === app.id) {
+                  setSuppressedWindowClickAppId(null);
+                  return;
+                }
+
+                if (isMobileViewport()) {
+                  focusOrExpandWindow(app.id);
+                }
+              }}
+              onPointerDown={() => focusWindow(app.id)}
               role="dialog"
               style={{
                 height: windowState.isMaximized ? undefined : app.defaultSize.height,
@@ -531,7 +568,10 @@ export function DesktopShell() {
                   <button
                     aria-label={`Minimize ${app.label}`}
                     className="window-control window-minimize"
-                    onClick={() => minimizeApp(app.id)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      minimizeApp(app.id);
+                    }}
                     onPointerDown={(event) => event.stopPropagation()}
                     type="button"
                   >
@@ -544,7 +584,10 @@ export function DesktopShell() {
                         : `Maximize ${app.label}`
                     }
                     className="window-control window-maximize"
-                    onClick={() => toggleMaximizeApp(app.id)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      toggleMaximizeApp(app.id);
+                    }}
                     onPointerDown={(event) => event.stopPropagation()}
                     type="button"
                   >
@@ -557,7 +600,10 @@ export function DesktopShell() {
                   <button
                     aria-label={`Close ${app.label}`}
                     className="window-control window-close"
-                    onClick={() => closeApp(app.id)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      closeApp(app.id);
+                    }}
                     onPointerDown={(event) => event.stopPropagation()}
                     type="button"
                   >

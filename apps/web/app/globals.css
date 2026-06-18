@@ -1346,7 +1346,6 @@ button.app-link {
     max-width: 100%;
     width: 100%;
     overflow-x: auto;
-    padding-bottom: 8px;
     pointer-events: auto;
     scroll-snap-type: x proximity;
   }
@@ -1383,7 +1382,7 @@ button.app-link {
     top: auto !important;
     left: auto !important;
     width: calc(100% - var(--stack-offset, 0px)) !important;
-    height: min(46svh, 360px) !important;
+    height: calc(100svh - 118px) !important;
     max-width: 100%;
     max-height: none;
     margin-left: var(--stack-offset, 0px);
@@ -1446,11 +1445,11 @@ button.app-link {
     inset: 0 0 auto;
     z-index: 220;
     display: none;
-    gap: 6px;
+    gap: 0;
     overflow-x: auto;
     border-bottom: 1px solid #202124;
-    background: #181b20;
-    padding: 7px;
+    background: rgba(32, 33, 36, 0.92);
+    padding: 0 6px;
   }
 
   .desktop-shell:has(.desktop-window[data-maximized="true"])
@@ -1458,34 +1457,61 @@ button.app-link {
     display: flex;
   }
 
+  .desktop-shell:has(.desktop-window[data-maximized="true"]) .desktop-icons {
+    display: none;
+  }
+
   .mobile-window-tab {
+    position: relative;
     display: inline-flex;
-    min-width: max-content;
+    min-width: 128px;
+    height: 42px;
     align-items: center;
-    gap: 6px;
-    border: 1px solid #2c3035;
-    border-radius: 6px;
-    background: #101318;
-    color: #c8d0d8;
+    gap: 8px;
+    border: 1px solid #34383e;
+    border-bottom: 0;
+    border-radius: 0;
+    background: #2b2f35;
+    color: #d7dde2;
     cursor: pointer;
     font: inherit;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 700;
-    padding: 7px 9px;
+    line-height: 1;
+    padding: 0 12px;
+  }
+
+  .mobile-window-tab:hover,
+  .mobile-window-tab:focus-visible {
+    background: #343940;
+    outline: none;
   }
 
   .mobile-window-tab[data-focused="true"] {
-    border-color: #86efac;
-    background: #203027;
+    background: #3d424a;
     color: #ffffff;
   }
 
-  .mobile-tab-status {
-    width: 8px;
-    height: 8px;
+  .mobile-window-tab svg {
+    width: 18px;
+    height: 18px;
     flex: 0 0 auto;
-    border-radius: 999px;
-    background: #6f767d;
+    border-radius: 3px;
+    background: #d7dde2;
+    color: #202124;
+    padding: 2px;
+  }
+
+  .mobile-window-tab span:last-child {
+    min-width: 0;
+    max-width: 82px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-tab-status {
+    display: none;
   }
 
   .mobile-window-tab[data-running="true"] .mobile-tab-status {
