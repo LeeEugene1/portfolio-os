@@ -13,7 +13,13 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { motion } from "framer-motion";
 import { Maximize2, Minimize2, Minus, X } from "lucide-react";
-import { type CSSProperties, useMemo, useRef, useState } from "react";
+import {
+  type CSSProperties,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   appsById,
   desktopApps,
@@ -156,14 +162,32 @@ function isMobileViewport() {
   return window.matchMedia("(max-width: 720px)").matches;
 }
 
+function useIsMobileViewport() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 720px)");
+    const syncViewport = () => setIsMobile(mediaQuery.matches);
+
+    syncViewport();
+    mediaQuery.addEventListener("change", syncViewport);
+
+    return () => mediaQuery.removeEventListener("change", syncViewport);
+  }, []);
+
+  return isMobile;
+}
+
 function DesktopIcon({
   app,
   isActive,
+  isMobile,
   onOpen,
   position,
 }: {
   app: DesktopApp;
   isActive: boolean;
+  isMobile: boolean;
   onOpen: (appId: AppId) => void;
   position: IconPosition;
 }) {
@@ -182,11 +206,11 @@ function DesktopIcon({
       style={{
         left: position.x,
         top: position.y,
-        transform: CSS.Transform.toString(transform),
+        transform: isMobile ? undefined : CSS.Transform.toString(transform),
       }}
       type="button"
-      {...attributes}
-      {...listeners}
+      {...(isMobile ? {} : attributes)}
+      {...(isMobile ? {} : listeners)}
     >
       <span className="desktop-icon-tile" aria-hidden="true">
         <Icon size={28} strokeWidth={1.8} />
@@ -222,6 +246,7 @@ export function DesktopShell() {
   const [suppressedWindowClickAppId, setSuppressedWindowClickAppId] =
     useState<AppId | null>(null);
   const draggedWindowAppIdRef = useRef<AppId | null>(null);
+  const isMobile = useIsMobileViewport();
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -368,17 +393,17 @@ export function DesktopShell() {
   ) {
     event.stopPropagation();
 
+    if (isMobileViewport()) {
+      return;
+    }
+
     if (windowState.isMaximized) {
-      if (!isMobileViewport()) {
-        focusWindow(appId);
-      }
+      focusWindow(appId);
       return;
     }
 
     event.currentTarget.setPointerCapture?.(event.pointerId);
-    if (!isMobileViewport()) {
-      focusWindow(appId);
-    }
+    focusWindow(appId);
     setDragState({
       kind: "window",
       appId,
@@ -473,6 +498,7 @@ export function DesktopShell() {
           {desktopApps.map((app) => (
             <DesktopIcon
               app={app}
+              isMobile={isMobile}
               isActive={runningAppIds.has(app.id)}
               key={app.id}
               onOpen={(appId) => {
@@ -537,7 +563,11 @@ export function DesktopShell() {
                   focusOrExpandWindow(app.id);
                 }
               }}
-              onPointerDown={() => focusWindow(app.id)}
+              onPointerDown={() => {
+                if (!isMobileViewport()) {
+                  focusWindow(app.id);
+                }
+              }}
               role="dialog"
               style={{
                 height: windowState.isMaximized ? undefined : app.defaultSize.height,

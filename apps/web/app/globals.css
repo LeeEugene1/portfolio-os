@@ -1342,12 +1342,17 @@ button.app-link {
     position: relative;
     inset: auto;
     display: flex;
-    gap: 8px;
+    gap: 0;
     max-width: 100%;
     width: 100%;
     overflow-x: auto;
     pointer-events: auto;
     scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .desktop-icons::-webkit-scrollbar {
+    display: none;
   }
 
   .desktop-icon {
@@ -1448,7 +1453,7 @@ button.app-link {
     gap: 0;
     overflow-x: auto;
     border-bottom: 1px solid #202124;
-    background: rgba(32, 33, 36, 0.92);
+    background: rgba(238, 243, 244, 0.96);
     padding: 0 6px;
   }
 
@@ -1468,11 +1473,11 @@ button.app-link {
     height: 42px;
     align-items: center;
     gap: 8px;
-    border: 1px solid #34383e;
+    border: 1px solid #202124;
     border-bottom: 0;
     border-radius: 0;
-    background: #2b2f35;
-    color: #d7dde2;
+    background: rgba(255, 255, 255, 0.76);
+    color: #202124;
     cursor: pointer;
     font: inherit;
     font-size: 15px;
@@ -1483,13 +1488,14 @@ button.app-link {
 
   .mobile-window-tab:hover,
   .mobile-window-tab:focus-visible {
-    background: #343940;
+    background: #ffffff;
     outline: none;
   }
 
   .mobile-window-tab[data-focused="true"] {
-    background: #3d424a;
-    color: #ffffff;
+    background: #ffffff;
+    color: #202124;
+    box-shadow: inset 0 -3px 0 #202124;
   }
 
   .mobile-window-tab svg {
@@ -1511,7 +1517,15 @@ button.app-link {
   }
 
   .mobile-tab-status {
-    display: none;
+    position: absolute;
+    right: 8px;
+    top: 7px;
+    display: block;
+    width: 8px;
+    height: 8px;
+    border: 1px solid #202124;
+    border-radius: 999px;
+    background: #cfd6d9;
   }
 
   .mobile-window-tab[data-running="true"] .mobile-tab-status {
