@@ -83,6 +83,22 @@ describe("DesktopShell", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("opens new desktop windows with a cascading creation offset", () => {
+    render(<DesktopShell />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Open Store" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open Resume" }));
+
+    expect(screen.getByRole("dialog", { name: "Store" })).toHaveStyle({
+      left: "440px",
+      top: "158px",
+    });
+    expect(screen.getByRole("dialog", { name: "Resume" })).toHaveStyle({
+      left: "520px",
+      top: "120px",
+    });
+  });
+
   it("minimizes and restores app windows from the dock", () => {
     render(<DesktopShell />);
 
@@ -250,5 +266,18 @@ describe("DesktopShell", () => {
     expect(
       screen.getByRole("navigation", { name: "Running applications" }),
     ).toBeInTheDocument();
+  });
+
+  it("does not render mobile tabs after opening multiple apps", () => {
+    render(<DesktopShell />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Open Store" }));
+
+    expect(
+      screen.queryByRole("navigation", { name: "Mobile applications" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Mobile tab Store" }),
+    ).not.toBeInTheDocument();
   });
 });

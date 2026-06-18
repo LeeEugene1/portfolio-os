@@ -11,8 +11,15 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+import { motion } from "framer-motion";
 import { Maximize2, Minimize2, Minus, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import {
+  type CSSProperties,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   appsById,
   desktopApps,
@@ -25,6 +32,7 @@ type WindowState = {
   zIndex: number;
   x: number;
   y: number;
+  openOrder: number;
   isMaximized: boolean;
   isMinimized: boolean;
 };
@@ -34,6 +42,9 @@ type DragState = {
   appId: AppId;
   offsetX: number;
   offsetY: number;
+  startX: number;
+  startY: number;
+  hasMoved: boolean;
 };
 
 type IconPosition = {
@@ -41,14 +52,20 @@ type IconPosition = {
   y: number;
 };
 
-function createWindowState(appId: AppId, zIndex: number): WindowState {
+function createWindowState(
+  appId: AppId,
+  zIndex: number,
+  openOrder: number,
+): WindowState {
   const app = appsById.get(appId);
+  const openOffset = openOrder * 10;
 
   return {
     appId,
     zIndex,
-    x: app?.defaultPosition.x ?? 0,
-    y: app?.defaultPosition.y ?? 0,
+    x: (app?.defaultPosition.x ?? 0) + openOffset,
+    y: (app?.defaultPosition.y ?? 0) + openOffset,
+    openOrder,
     isMaximized: false,
     isMinimized: false,
   };
@@ -61,7 +78,7 @@ function clampWindowPosition(x: number, y: number) {
   };
 }
 
-const initialWindows: WindowState[] = [createWindowState("portfolio", 1)];
+const initialWindows: WindowState[] = [createWindowState("portfolio", 1, 0)];
 const iconOrigin = 24;
 const iconStep = 102;
 const iconSize = 88;
@@ -79,14 +96,36 @@ function clampIconPosition(x: number, y: number) {
   };
 }
 
+function isMobileViewport() {
+  return window.matchMedia("(max-width: 720px)").matches;
+}
+
+function useIsMobileViewport() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 720px)");
+    const syncViewport = () => setIsMobile(mediaQuery.matches);
+
+    syncViewport();
+    mediaQuery.addEventListener("change", syncViewport);
+
+    return () => mediaQuery.removeEventListener("change", syncViewport);
+  }, []);
+
+  return isMobile;
+}
+
 function DesktopIcon({
   app,
   isActive,
+  isMobile,
   onOpen,
   position,
 }: {
   app: DesktopApp;
   isActive: boolean;
+  isMobile: boolean;
   onOpen: (appId: AppId) => void;
   position: IconPosition;
 }) {
@@ -105,11 +144,11 @@ function DesktopIcon({
       style={{
         left: position.x,
         top: position.y,
-        transform: CSS.Transform.toString(transform),
+        transform: isMobile ? undefined : CSS.Transform.toString(transform),
       }}
       type="button"
-      {...attributes}
-      {...listeners}
+      {...(isMobile ? {} : attributes)}
+      {...(isMobile ? {} : listeners)}
     >
       <span className="desktop-icon-tile" aria-hidden="true">
         <Icon size={28} strokeWidth={1.8} />
@@ -139,8 +178,13 @@ export function DesktopShell() {
   const [nextZIndex, setNextZIndex] = useState(2);
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [activeIconId, setActiveIconId] = useState<AppId | null>(null);
+  const [nextOpenOrder, setNextOpenOrder] = useState(1);
   const [suppressedClickAppId, setSuppressedClickAppId] =
     useState<AppId | null>(null);
+  const [suppressedWindowClickAppId, setSuppressedWindowClickAppId] =
+    useState<AppId | null>(null);
+  const draggedWindowAppIdRef = useRef<AppId | null>(null);
+  const isMobile = useIsMobileViewport();
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -168,6 +212,9 @@ export function DesktopShell() {
     );
   }, [visibleWindows]);
   const activeIcon = activeIconId ? appsById.get(activeIconId) : undefined;
+  const hasMaximizedWindow = visibleWindows.some(
+    (windowState) => windowState.isMaximized,
+  );
   const runningAppIds = useMemo(
     () => new Set(windows.map((windowState) => windowState.appId)),
     [windows],
@@ -193,19 +240,56 @@ export function DesktopShell() {
     setNextZIndex((current) => current + 1);
   }
 
-  function openApp(appId: AppId) {
+  function focusOrExpandWindow(appId: AppId) {
+    const shouldExpand = isMobileViewport();
+
+    setWindows((currentWindows) =>
+      currentWindows.map((windowState) =>
+        windowState.appId === appId
+          ? {
+              ...windowState,
+              zIndex: nextZIndex,
+              isMaximized: shouldExpand ? true : windowState.isMaximized,
+              isMinimized: false,
+            }
+          : shouldExpand
+            ? { ...windowState, isMaximized: false }
+            : windowState,
+      ),
+    );
+    setNextZIndex((current) => current + 1);
+  }
+
+  function openApp(appId: AppId, options?: { expandOnMobile?: boolean }) {
+    const shouldExpand = Boolean(options?.expandOnMobile && isMobileViewport());
+
     setWindows((currentWindows) => {
       if (currentWindows.some((windowState) => windowState.appId === appId)) {
         return currentWindows.map((windowState) =>
           windowState.appId === appId
-            ? { ...windowState, zIndex: nextZIndex, isMinimized: false }
-            : windowState,
+            ? {
+                ...windowState,
+                zIndex: nextZIndex,
+                isMaximized: shouldExpand ? true : windowState.isMaximized,
+                isMinimized: false,
+              }
+            : shouldExpand
+              ? { ...windowState, isMaximized: false }
+              : windowState,
         );
       }
 
-      return [...currentWindows, createWindowState(appId, nextZIndex)];
+      const nextWindow = createWindowState(appId, nextZIndex, nextOpenOrder);
+
+      return [
+        ...currentWindows.map((windowState) =>
+          shouldExpand ? { ...windowState, isMaximized: false } : windowState,
+        ),
+        { ...nextWindow, isMaximized: shouldExpand },
+      ];
     });
     setNextZIndex((current) => current + 1);
+    setNextOpenOrder((current) => current + 1);
   }
 
   function closeApp(appId: AppId) {
@@ -245,6 +329,12 @@ export function DesktopShell() {
     event: React.PointerEvent<HTMLElement>,
     windowState: WindowState,
   ) {
+    event.stopPropagation();
+
+    if (isMobileViewport()) {
+      return;
+    }
+
     if (windowState.isMaximized) {
       focusWindow(appId);
       return;
@@ -257,6 +347,9 @@ export function DesktopShell() {
       appId,
       offsetX: event.clientX - windowState.x,
       offsetY: event.clientY - windowState.y,
+      startX: event.clientX,
+      startY: event.clientY,
+      hasMoved: false,
     });
   }
 
@@ -265,11 +358,19 @@ export function DesktopShell() {
       return;
     }
 
+    const hasMoved =
+      dragState.hasMoved ||
+      Math.abs(event.clientX - dragState.startX) > 4 ||
+      Math.abs(event.clientY - dragState.startY) > 4;
     const nextPosition = clampWindowPosition(
       event.clientX - dragState.offsetX,
       event.clientY - dragState.offsetY,
     );
 
+    if (hasMoved !== dragState.hasMoved) {
+      draggedWindowAppIdRef.current = dragState.appId;
+      setDragState({ ...dragState, hasMoved });
+    }
     setWindows((currentWindows) =>
       currentWindows.map((windowState) =>
         windowState.appId === dragState.appId
@@ -284,6 +385,10 @@ export function DesktopShell() {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
 
+    if (draggedWindowAppIdRef.current) {
+      setSuppressedWindowClickAppId(draggedWindowAppIdRef.current);
+      draggedWindowAppIdRef.current = null;
+    }
     setDragState(null);
   }
 
@@ -327,6 +432,7 @@ export function DesktopShell() {
           {desktopApps.map((app) => (
             <DesktopIcon
               app={app}
+              isMobile={isMobile}
               isActive={runningAppIds.has(app.id)}
               key={app.id}
               onOpen={(appId) => {
@@ -346,8 +452,12 @@ export function DesktopShell() {
         </DragOverlay>
       </DndContext>
 
-      <section className="window-layer" aria-label="Open windows">
-        {orderedWindows.map((windowState) => {
+      <section
+        className="window-layer"
+        aria-label="Open windows"
+        data-has-maximized={hasMaximizedWindow}
+      >
+        {orderedWindows.map((windowState, stackIndex) => {
           const app = appsById.get(windowState.appId);
 
           if (!app) {
@@ -359,14 +469,38 @@ export function DesktopShell() {
           const isFocused = focusedAppId === app.id;
 
           return (
-            <article
+            <motion.article
               aria-labelledby={titleId}
               className="desktop-window"
               data-app-id={app.id}
               data-focused={isFocused}
               data-maximized={windowState.isMaximized}
+              data-stack-index={stackIndex}
+              initial={{ opacity: 0, scale: 0.96, y: 16 }}
               key={app.id}
-              onPointerDown={() => focusWindow(app.id)}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                boxShadow: isFocused
+                  ? "10px 10px 0 #202124"
+                  : "8px 8px 0 rgba(32, 33, 36, 0.9)",
+              }}
+              onClick={() => {
+                if (suppressedWindowClickAppId === app.id) {
+                  setSuppressedWindowClickAppId(null);
+                  return;
+                }
+
+                if (isMobileViewport()) {
+                  focusOrExpandWindow(app.id);
+                }
+              }}
+              onPointerDown={() => {
+                if (!isMobileViewport()) {
+                  focusWindow(app.id);
+                }
+              }}
               role="dialog"
               style={{
                 height: windowState.isMaximized ? undefined : app.defaultSize.height,
@@ -374,7 +508,11 @@ export function DesktopShell() {
                 top: windowState.isMaximized ? undefined : windowState.y,
                 width: windowState.isMaximized ? undefined : app.defaultSize.width,
                 zIndex: windowState.zIndex,
-              }}
+                "--stack-index": stackIndex,
+                "--stack-offset": `${stackIndex * 10}px`,
+                "--stack-lift": `${stackIndex * -18}px`,
+              } as CSSProperties}
+              transition={{ duration: 0.18, ease: "easeOut" }}
             >
               <header
                 className="window-titlebar"
@@ -393,7 +531,10 @@ export function DesktopShell() {
                   <button
                     aria-label={`Minimize ${app.label}`}
                     className="window-control window-minimize"
-                    onClick={() => minimizeApp(app.id)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      minimizeApp(app.id);
+                    }}
                     onPointerDown={(event) => event.stopPropagation()}
                     type="button"
                   >
@@ -406,7 +547,10 @@ export function DesktopShell() {
                         : `Maximize ${app.label}`
                     }
                     className="window-control window-maximize"
-                    onClick={() => toggleMaximizeApp(app.id)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      toggleMaximizeApp(app.id);
+                    }}
                     onPointerDown={(event) => event.stopPropagation()}
                     type="button"
                   >
@@ -419,7 +563,10 @@ export function DesktopShell() {
                   <button
                     aria-label={`Close ${app.label}`}
                     className="window-control window-close"
-                    onClick={() => closeApp(app.id)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      closeApp(app.id);
+                    }}
                     onPointerDown={(event) => event.stopPropagation()}
                     type="button"
                   >
@@ -430,7 +577,7 @@ export function DesktopShell() {
               <div className="window-body">
                 <Content />
               </div>
-            </article>
+            </motion.article>
           );
         })}
       </section>

@@ -147,11 +147,12 @@ a {
 }
 
 .desktop-window[data-maximized="true"] {
-  inset: 16px 16px 18px !important;
+  inset: 0 !important;
   width: auto !important;
   height: auto !important;
   max-width: none;
   max-height: none;
+  border-radius: 0;
 }
 
 .window-titlebar {
@@ -268,6 +269,14 @@ a {
 .desktop-shell:has(.desktop-window[data-maximized="true"]) .app-dock {
   opacity: 0;
   transform: translate(-50%, calc(100% + 10px));
+}
+
+.desktop-shell:has(.desktop-window[data-maximized="true"]) .window-layer {
+  inset: 0;
+}
+
+.desktop-shell:has(.desktop-window[data-maximized="true"]) .dock-zone {
+  pointer-events: none;
 }
 
 .desktop-shell:has(.desktop-window[data-maximized="true"])
@@ -1329,10 +1338,7 @@ button.app-link {
 
 @media (max-width: 720px) {
   .desktop-shell {
-    display: flex;
     min-height: 100svh;
-    flex-direction: column;
-    gap: 16px;
     overflow: auto;
     padding: 14px;
   }
@@ -1340,19 +1346,27 @@ button.app-link {
   .desktop-icons {
     position: relative;
     inset: auto;
-    display: grid;
-    grid-template-columns: repeat(5, minmax(56px, 1fr));
-    gap: 8px;
+    display: flex;
+    gap: 0;
     max-width: 100%;
     width: 100%;
+    overflow-x: auto;
     pointer-events: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .desktop-icons::-webkit-scrollbar {
+    display: none;
   }
 
   .desktop-icon {
     position: static;
-    width: 100%;
+    width: 70px;
+    min-width: 70px;
     min-height: 78px;
     padding: 6px 2px;
+    scroll-snap-align: start;
   }
 
   .desktop-icon-tile {
@@ -1366,9 +1380,10 @@ button.app-link {
   }
 
   .window-layer {
-    position: static;
-    display: grid;
-    gap: 14px;
+    position: relative;
+    display: block;
+    min-height: calc(100svh - 116px);
+    padding-top: 12px;
     pointer-events: auto;
   }
 
@@ -1376,17 +1391,39 @@ button.app-link {
     position: relative;
     top: auto !important;
     left: auto !important;
-    width: 100% !important;
-    height: min(66svh, 520px) !important;
+    width: calc(100% - var(--stack-offset, 0px)) !important;
+    height: calc(100svh - 118px) !important;
     max-width: 100%;
     max-height: none;
+    margin-left: var(--stack-offset, 0px);
+    margin-top: var(--stack-lift, 0px);
     box-shadow: 5px 5px 0 #202124;
   }
 
   .desktop-window[data-maximized="true"] {
     position: fixed;
-    inset: 10px 10px 74px !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0;
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: 0;
     z-index: 160 !important;
+  }
+
+  .desktop-window:not([data-maximized="true"]) .window-body {
+    overflow: hidden;
+  }
+
+  .desktop-window[data-maximized="true"] .window-body {
+    overflow: auto;
+  }
+
+  .window-layer[data-has-maximized="true"] {
+    min-height: 100svh;
+    padding-top: 0;
   }
 
   .window-titlebar {
@@ -1413,8 +1450,16 @@ button.app-link {
     display: none;
   }
 
+  .desktop-shell:has(.desktop-window[data-maximized="true"]) .desktop-icons {
+    display: none;
+  }
+
   .desktop-window[data-app-id="calculator"] {
     height: min(88dvh, 540px) !important;
+  }
+
+  .desktop-window[data-app-id="calculator"][data-maximized="true"] {
+    height: auto !important;
   }
 
   .store-layout {
