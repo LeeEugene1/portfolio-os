@@ -9,7 +9,7 @@ void main() {
   runApp(const PortfolioOsShellApp());
 }
 
-typedef WebViewBuilder = Widget Function(WebViewController controller);
+typedef WebViewBuilder = Widget Function(WebViewController? controller);
 
 const String defaultPortfolioUrl = 'https://web-six-chi-49.vercel.app';
 
@@ -49,13 +49,17 @@ class _ShellHomeState extends State<ShellHome> {
     ),
   );
 
-  late final WebViewController _controller;
+  WebViewController? _controller;
   var _loadingProgress = 0;
   String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.webViewBuilder != null) {
+      return;
+    }
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -99,8 +103,9 @@ class _ShellHomeState extends State<ShellHome> {
       canPop: false,
       onPopInvokedWithResult: (didPop, _) async {
         if (didPop) return;
-        if (await _controller.canGoBack()) {
-          await _controller.goBack();
+        final controller = _controller;
+        if (controller != null && await controller.canGoBack()) {
+          await controller.goBack();
           return;
         }
         await SystemNavigator.pop();
@@ -111,7 +116,7 @@ class _ShellHomeState extends State<ShellHome> {
             children: [
               Positioned.fill(
                 child: widget.webViewBuilder?.call(_controller) ??
-                    WebViewWidget(controller: _controller),
+                    WebViewWidget(controller: _controller!),
               ),
               if (_loadingProgress < 100 && _errorMessage == null)
                 LinearProgressIndicator(value: _loadingProgress / 100),
@@ -123,7 +128,7 @@ class _ShellHomeState extends State<ShellHome> {
                       _errorMessage = null;
                       _loadingProgress = 0;
                     });
-                    _controller.loadRequest(_homeUri);
+                    _controller?.loadRequest(_homeUri);
                   },
                 ),
             ],
