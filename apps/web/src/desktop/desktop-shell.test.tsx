@@ -13,6 +13,9 @@ describe("DesktopShell", () => {
       screen.getByRole("button", { name: "Open Portfolio" }),
     ).toBeInTheDocument();
     expect(
+      screen.getByRole("button", { name: "Dock Portfolio: focus" }),
+    ).toHaveAttribute("data-running", "true");
+    expect(
       screen.getByRole("dialog", { name: "Portfolio" }),
     ).toBeInTheDocument();
     for (const appName of [
@@ -78,6 +81,46 @@ describe("DesktopShell", () => {
     expect(
       screen.queryByRole("dialog", { name: "Store" }),
     ).not.toBeInTheDocument();
+  });
+
+  it("minimizes and restores app windows from the dock", () => {
+    render(<DesktopShell />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Open Store" }));
+    fireEvent.click(screen.getByRole("button", { name: "Minimize Store" }));
+
+    expect(
+      screen.queryByRole("dialog", { name: "Store" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Dock Store: focus" }),
+    ).toHaveAttribute("data-minimized", "true");
+
+    fireEvent.click(screen.getByRole("button", { name: "Dock Store: focus" }));
+
+    expect(screen.getByRole("dialog", { name: "Store" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Dock Store: focus" }),
+    ).toHaveAttribute("data-minimized", "false");
+  });
+
+  it("maximizes and restores app windows from desktop controls", () => {
+    render(<DesktopShell />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Open Store" }));
+
+    const storeWindow = screen.getByRole("dialog", { name: "Store" });
+
+    fireEvent.click(screen.getByRole("button", { name: "Maximize Store" }));
+
+    expect(storeWindow).toHaveAttribute("data-maximized", "true");
+    expect(
+      screen.getByRole("button", { name: "Restore Store" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Restore Store" }));
+
+    expect(storeWindow).toHaveAttribute("data-maximized", "false");
   });
 
   it("brings an existing window forward when its icon is opened again", () => {
@@ -181,61 +224,31 @@ describe("DesktopShell", () => {
     expect(portfolioWindow).toHaveStyle({ left: "270px", top: "88px" });
   });
 
-  it("moves a desktop icon by dragging it", () => {
+  it("renders sortable app icons with running state", () => {
     render(<DesktopShell />);
 
     const storeIcon = screen.getByRole("button", { name: "Open Store" });
 
-    fireEvent.pointerDown(storeIcon, {
-      clientX: 40,
-      clientY: 140,
-      pointerId: 1,
-    });
-    fireEvent.pointerMove(storeIcon, {
-      clientX: 120,
-      clientY: 180,
-      pointerId: 1,
-    });
-    fireEvent.pointerUp(storeIcon, {
-      clientX: 120,
-      clientY: 180,
-      pointerId: 1,
-    });
-
-    expect(storeIcon).toHaveStyle({ left: "126px", top: "126px" });
     fireEvent.click(storeIcon);
-    expect(
-      screen.queryByRole("dialog", { name: "Store" }),
-    ).not.toBeInTheDocument();
 
-    fireEvent.click(storeIcon);
     expect(screen.getByRole("dialog", { name: "Store" })).toBeInTheDocument();
+    expect(storeIcon).toHaveAttribute("data-running", "true");
+    expect(
+      screen.getByRole("button", { name: "Dock Store: focus" }),
+    ).toHaveAttribute("data-running", "true");
   });
 
-  it("keeps desktop icons from overlapping occupied slots", () => {
+  it("keeps maximized windows below the dock controls", () => {
     render(<DesktopShell />);
 
-    const resumeIcon = screen.getByRole("button", { name: "Open Resume" });
+    fireEvent.click(screen.getByRole("button", { name: "Maximize Portfolio" }));
 
-    fireEvent.pointerDown(resumeIcon, {
-      clientX: 40,
-      clientY: 240,
-      pointerId: 1,
-    });
-    fireEvent.pointerMove(resumeIcon, {
-      clientX: 40,
-      clientY: 40,
-      pointerId: 1,
-    });
-    fireEvent.pointerUp(resumeIcon, {
-      clientX: 40,
-      clientY: 40,
-      pointerId: 1,
-    });
-
-    expect(resumeIcon).toHaveStyle({ left: "126px", top: "24px" });
-    expect(screen.getByRole("button", { name: "Open Portfolio" })).toHaveStyle(
-      { left: "24px", top: "24px" },
+    expect(screen.getByRole("dialog", { name: "Portfolio" })).toHaveAttribute(
+      "data-maximized",
+      "true",
     );
+    expect(
+      screen.getByRole("navigation", { name: "Running applications" }),
+    ).toBeInTheDocument();
   });
 });
