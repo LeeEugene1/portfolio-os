@@ -181,6 +181,10 @@ describe("DesktopShell", () => {
     expect(screen.getAllByRole("dialog")[0]).toHaveAccessibleName(
       "Calculator",
     );
+    expect(screen.getAllByRole("dialog")[1]).toHaveAttribute(
+      "data-stack-index",
+      "1",
+    );
   });
 
   it("opens the Contact app as a compact resume card", () => {
@@ -194,12 +198,14 @@ describe("DesktopShell", () => {
     expect(
       within(contactProfile).getByRole("heading", { name: "이유진" }),
     ).toBeInTheDocument();
+    expect(within(contactProfile).getByText("프론트엔드개발자")).toBeInTheDocument();
     expect(
       within(contactProfile).getByRole("img", { name: "이유진 증명사진" }),
     ).toHaveAttribute(
       "src",
       expect.stringContaining("profile.png"),
     );
+    expect(screen.getByLabelText("Contact channels")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "010 5652 6287" })).toHaveAttribute(
       "href",
       "tel:01056526287",
