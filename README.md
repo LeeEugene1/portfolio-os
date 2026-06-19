@@ -134,12 +134,45 @@ DEV_HARNESS (서버 실행 / 포트)
 
 이 방식으로 작업 순서, 브랜치 규칙, 검증 명령, PR 형식을 문서화하고 이슈별로 재사용했습니다.
 
-### 하네스와 트러블슈팅
+### AI 기반 작업 방식
 
-- `DEV_HARNESS.md`: 포트 확인, 서버 실행, 포트 선택, 종료 시점을 문서화해 AI가 매번 같은 절차로 개발 서버를 다루게 했습니다.
-- `TEST_PLAN.md`: `npm run verify`, `npm run verify:full`, `flutter analyze/test/build apk`를 기준 검증 명령으로 묶었습니다.
-- 병렬 작업 중 디렉터리 공유, 포트 충돌, README 누락 문제가 있어 Git worktree로 이슈별 작업 공간을 분리하고 README 업데이트를 PR 조건에 넣었습니다.
-- 오래된 main 기준 PR로 충돌이 나는 문제는 브랜치 생성, 커밋, push, PR 직전에 `git merge-base --is-ancestor origin/main HEAD`를 확인하도록 해결했습니다.
+이 프로젝트는 문서, GitHub Issue, PR, 검증 스크립트를 기준으로 작업을 진행합니다.
+
+반복되는 이슈 처리 흐름은 로컬 Codex skill로 묶어 사용했고, 에이전트는 `docs/
+AGENT_WORKFLOW.md`를 진입점으로 삼아 작업 규칙을 확인합니다.
+
+작업 흐름:
+
+```txt
+GitHub Issue
+  -> AGENT_WORKFLOW.md: 승인 게이트, 브랜치 규칙, PR 규칙 확인
+  -> ORCHESTRATION.md: phase와 PR 순서 확인
+  -> TEST_PLAN.md: 검증 명령 확인
+  -> DEV_HARNESS.md: 개발 서버와 포트 규칙 확인
+  -> 구현
+  -> 테스트
+  -> PR
+  -> 사용자 검수
+```
+
+  ### 하네스와 트러블슈팅
+
+  병렬 에이전트 작업에서는 구현 자체뿐 아니라 실행 환경을 일관되게 유지하는 것이 중요
+  했습니다. 그래서 개발 서버 실행, 포트 관리, 검증 명령을 하네스로 문서화했습니다.
+
+  - `DEV_HARNESS.md`: 포트 확인, 서버 실행, 빈 포트 선택, 종료 시점을 문서화해 에이전
+  트가 매번 같은 절차로 개발 서버를 다루도록 했습니다.
+  - `TEST_PLAN.md`: `npm run verify`, `npm run verify:full`, `flutter analyze`,
+  `flutter test`, `flutter build apk`를 기준 검증 명령으로 묶었습니다.
+  - 디렉터리 공유로 브랜치와 파일 변경이 섞이는 문제는 이슈별 `git worktree`를 사용해
+  작업 공간을 분리했습니다.
+  - 로컬 포트 충돌은 `DEV_HARNESS.md`의 포트 확인과 빈 포트 선택 규칙으로 대응했습니
+  다.
+  - README 누락은 사용자 실행 방식, 검증 방식, 배포/하네스 절차가 바뀌면 README 업데
+  이트를 PR 조건에 포함하도록 했습니다.
+  - 오래된 `main` 기준 PR로 충돌이 나는 문제는 브랜치 생성, 구현 시작, 커밋, push, PR
+  생성 직전에 `git merge-base --is-ancestor origin/main HEAD`로 최신 `origin/main` 포
+  함 여부를 확인하도록 해결했습니다.
 
 ## 데모
 
