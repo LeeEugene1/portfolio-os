@@ -106,9 +106,8 @@ Flutter App
 
 Flutter 앱은 제품 UI를 다시 만들지 않고 웹앱을 로드하는 셸 역할만 담당합니다. 실제 포트폴리오 기능, 반응형 UI, 장바구니, 계산기, 이력서 화면은 `apps/web` 안에서 구현합니다.
 
-## AI 기반 오케스트레이션 활용
-
-이 프로젝트는 문서, GitHub Issue, PR, 검증 스크립트를 기준으로 진행했습니다. 반복되는 이슈 처리 흐름은 Codex skill로 묶어 사용했습니다.
+## AI 기반 병렬 작업 오케스트레이션
+이 프로젝트는 여러 Codex 세션을 이슈별 병렬 에이전트처럼 운영하고, GitHub Issue, git worktree, PR, 검증 스크립트, 문서화된 승인 게이트를 기준으로 작업을 조율했습니다. 반복되는 이슈 처리 흐름은 Codex skill로 묶어 사용했습니다.
 
 ```txt
 $portfolio-os-issue-runner 이슈 #6 진행해줘.
