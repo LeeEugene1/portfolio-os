@@ -183,7 +183,7 @@ describe("DesktopShell", () => {
     );
   });
 
-  it("opens the Contact app with email, phone, and profile links", () => {
+  it("opens the Contact app as a compact resume card", () => {
     render(<DesktopShell />);
 
     fireEvent.click(screen.getByRole("button", { name: "Open Contact" }));
@@ -204,22 +204,7 @@ describe("DesktopShell", () => {
     expect(
       within(contactProfile).getByText("5년 차 프론트엔드 개발자", { exact: false }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Email/i })).toHaveAttribute(
-      "href",
-      "mailto:uwm1004@gmail.com",
-    );
-    expect(screen.getByRole("link", { name: /Phone/i })).toHaveAttribute(
-      "href",
-      "tel:01056526287",
-    );
-    expect(screen.getByRole("link", { name: /GitHub/i })).toHaveAttribute(
-      "href",
-      "https://github.com/LeeEugene1",
-    );
-    expect(screen.getByRole("link", { name: /Blog/i })).toHaveAttribute(
-      "href",
-      "https://dubaiyu.tistory.com/",
-    );
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
   it("moves a window by dragging its titlebar", () => {

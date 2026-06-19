@@ -468,34 +468,6 @@ export function ContactApp() {
           <p>5년 차 프론트엔드 개발자 · Next.js / React · 커머스 / AI / WebView</p>
         </div>
       </section>
-      <div className="contact-links" aria-label="Contact channels">
-        <a className="contact-link" href="mailto:uwm1004@gmail.com">
-          <span>Email</span>
-          <strong>uwm1004@gmail.com</strong>
-        </a>
-        <a className="contact-link" href="tel:01056526287">
-          <span>Phone</span>
-          <strong>010 5652 6287</strong>
-        </a>
-        <a
-          className="contact-link"
-          href="https://github.com/LeeEugene1"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <span>GitHub</span>
-          <strong>github.com/LeeEugene1</strong>
-        </a>
-        <a
-          className="contact-link"
-          href="https://dubaiyu.tistory.com/"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <span>Blog</span>
-          <strong>dubaiyu.tistory.com</strong>
-        </a>
-      </div>
     </div>
   );
 }

@@ -860,9 +860,8 @@ button.app-link {
 }
 
 .contact-app {
-  width: min(100%, 620px);
+  width: min(100%, 640px);
   margin: 0 auto;
-  gap: 12px;
 }
 
 .contact-profile {
@@ -913,43 +912,6 @@ button.app-link {
   font-size: 20px;
   line-height: 1.25;
   overflow-wrap: anywhere;
-}
-
-.contact-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.contact-link {
-  display: grid;
-  gap: 4px;
-  flex: 1 1 260px;
-  min-width: 0;
-  border: 1px solid #202124;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #202124;
-  padding: 8px 10px;
-  text-decoration: none;
-}
-
-.contact-link:hover,
-.contact-link:focus-visible {
-  background: #fffbeb;
-  outline: none;
-}
-
-.contact-link span {
-  color: #6b7175;
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.contact-link strong {
-  overflow-wrap: anywhere;
-  font-size: 13px;
 }
 
 .terminal-portfolio {
@@ -1660,9 +1622,6 @@ button.app-link {
     font-size: 16px;
   }
 
-  .contact-link {
-    flex-basis: 100%;
-  }
 }
 
 .calculator-app {
