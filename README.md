@@ -107,7 +107,9 @@ Flutter App
 Flutter 앱은 제품 UI를 다시 만들지 않고 웹앱을 로드하는 셸 역할만 담당합니다. 실제 포트폴리오 기능, 반응형 UI, 장바구니, 계산기, 이력서 화면은 `apps/web` 안에서 구현합니다.
 
 ## AI 기반 병렬 작업 오케스트레이션
-이 프로젝트는 여러 Codex 세션을 이슈별 병렬 에이전트처럼 운영하고, GitHub Issue, git worktree, PR, 검증 스크립트, 문서화된 승인 게이트를 기준으로 작업을 조율했습니다. 반복되는 이슈 처리 흐름은 Codex skill로 묶어 사용했습니다.
+이 프로젝트는 여러 Codex 세션을 이슈별 병렬 에이전트처럼 운영하고, GitHub Issue, git worktree, PR, 검증 스크립트, 문서화된 승인 게이트를 기준으로 작업을 조율했습니다. 
+
+반복되는 이슈 처리 흐름은 Codex skill로 묶어 사용했습니다.
 
 ```txt
 $portfolio-os-issue-runner 이슈 #6 진행해줘.
@@ -131,28 +133,6 @@ DEV_HARNESS (서버 실행 / 포트)
 
 ```txt
 플랜 -> 승인(사람) -> 구현/테스트 -> PR -> 승인(사람)
-```
-
-이 방식으로 작업 순서, 브랜치 규칙, 검증 명령, PR 형식을 문서화하고 이슈별로 재사용했습니다.
-
-## 작업 방식
-
-이 프로젝트는 문서, GitHub Issue, PR, 검증 스크립트를 기준으로 작업을 진행합니다.
-
-반복되는 이슈 처리 흐름은 로컬 Codex skill로 묶어 사용했고, 에이전트는 `docs/AGENT_WORKFLOW.md`를 진입점으로 삼아 작업 규칙을 확인합니다.
-
-작업 흐름:
-
-```txt
-GitHub Issue
-  -> AGENT_WORKFLOW.md: 승인 게이트, 브랜치 규칙, PR 규칙 확인
-  -> ORCHESTRATION.md: phase와 PR 순서 확인
-  -> TEST_PLAN.md: 검증 명령 확인
-  -> DEV_HARNESS.md: 개발 서버와 포트 규칙 확인
-  -> 구현
-  -> 테스트
-  -> PR
-  -> 사용자 검수
 ```
 
 ## 하네스
