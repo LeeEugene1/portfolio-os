@@ -454,11 +454,18 @@ export function ResumeApp() {
 export function ContactApp() {
   return (
     <div className="app-content contact-app">
-      <p className="eyebrow">Contact</p>
       <section className="contact-profile" aria-label="Contact profile">
-        <div>
+        <Image
+          alt="이유진 증명사진"
+          className="contact-photo"
+          height={112}
+          src="/profile.png"
+          width={112}
+        />
+        <div className="contact-profile-copy">
+          <p className="eyebrow">Resume</p>
           <h2>이유진</h2>
-          <p>프론트엔드개발자</p>
+          <p>5년 차 프론트엔드 개발자 · Next.js / React · 커머스 / AI / WebView</p>
         </div>
       </section>
       <div className="contact-links" aria-label="Contact channels">

@@ -65,7 +65,7 @@ export const desktopApps: DesktopApp[] = [
     label: "Contact",
     title: "Contact",
     icon: Mail,
-    defaultSize: { width: 440, height: 300 },
+    defaultSize: { width: 640, height: 360 },
     defaultPosition: { x: 610, y: 190 },
     content: ContactApp,
   },

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { DesktopShell } from "./desktop-shell";
 
@@ -189,8 +189,21 @@ describe("DesktopShell", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open Contact" }));
 
     expect(screen.getByRole("dialog", { name: "Contact" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "이유진" })).toBeInTheDocument();
-    expect(screen.getByText("프론트엔드개발자")).toBeInTheDocument();
+    const contactProfile = screen.getByLabelText("Contact profile");
+
+    expect(
+      within(contactProfile).getByRole("heading", { name: "이유진" }),
+    ).toBeInTheDocument();
+    expect(
+      within(contactProfile).getByRole("img", { name: "이유진 증명사진" }),
+    ).toHaveAttribute(
+      "src",
+      expect.stringContaining("profile.png"),
+    );
+    expect(within(contactProfile).getByText("Resume")).toBeInTheDocument();
+    expect(
+      within(contactProfile).getByText("5년 차 프론트엔드 개발자", { exact: false }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Email/i })).toHaveAttribute(
       "href",
       "mailto:uwm1004@gmail.com",
