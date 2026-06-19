@@ -454,41 +454,28 @@ export function ResumeApp() {
 export function ContactApp() {
   return (
     <div className="app-content contact-app">
-      <p className="eyebrow">Contact</p>
       <section className="contact-profile" aria-label="Contact profile">
-        <div>
+        <Image
+          alt="이유진 증명사진"
+          className="contact-photo"
+          height={112}
+          src="/profile.png"
+          width={112}
+        />
+        <div className="contact-profile-copy">
           <h2>이유진</h2>
-          <p>프론트엔드개발자</p>
+          <div className="contact-card-details" aria-label="Contact details">
+            <a href="tel:01056526287">010 5652 6287</a>
+            <a href="mailto:uwm1004@gmail.com">uwm1004@gmail.com</a>
+            <a href="https://github.com/LeeEugene1" rel="noreferrer" target="_blank">
+              github.com/LeeEugene1
+            </a>
+            <a href="https://dubaiyu.tistory.com/" rel="noreferrer" target="_blank">
+              dubaiyu.tistory.com
+            </a>
+          </div>
         </div>
       </section>
-      <div className="contact-links" aria-label="Contact channels">
-        <a className="contact-link" href="mailto:uwm1004@gmail.com">
-          <span>Email</span>
-          <strong>uwm1004@gmail.com</strong>
-        </a>
-        <a className="contact-link" href="tel:01056526287">
-          <span>Phone</span>
-          <strong>010 5652 6287</strong>
-        </a>
-        <a
-          className="contact-link"
-          href="https://github.com/LeeEugene1"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <span>GitHub</span>
-          <strong>github.com/LeeEugene1</strong>
-        </a>
-        <a
-          className="contact-link"
-          href="https://dubaiyu.tistory.com/"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <span>Blog</span>
-          <strong>dubaiyu.tistory.com</strong>
-        </a>
-      </div>
     </div>
   );
 }

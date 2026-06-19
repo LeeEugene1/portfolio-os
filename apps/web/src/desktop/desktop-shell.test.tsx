@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { DesktopShell } from "./desktop-shell";
 
@@ -183,27 +183,36 @@ describe("DesktopShell", () => {
     );
   });
 
-  it("opens the Contact app with email, phone, and profile links", () => {
+  it("opens the Contact app as a compact resume card", () => {
     render(<DesktopShell />);
 
     fireEvent.click(screen.getByRole("button", { name: "Open Contact" }));
 
     expect(screen.getByRole("dialog", { name: "Contact" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "이유진" })).toBeInTheDocument();
-    expect(screen.getByText("프론트엔드개발자")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Email/i })).toHaveAttribute(
-      "href",
-      "mailto:uwm1004@gmail.com",
+    const contactProfile = screen.getByLabelText("Contact profile");
+
+    expect(
+      within(contactProfile).getByRole("heading", { name: "이유진" }),
+    ).toBeInTheDocument();
+    expect(
+      within(contactProfile).getByRole("img", { name: "이유진 증명사진" }),
+    ).toHaveAttribute(
+      "src",
+      expect.stringContaining("profile.png"),
     );
-    expect(screen.getByRole("link", { name: /Phone/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "010 5652 6287" })).toHaveAttribute(
       "href",
       "tel:01056526287",
     );
-    expect(screen.getByRole("link", { name: /GitHub/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "uwm1004@gmail.com" })).toHaveAttribute(
+      "href",
+      "mailto:uwm1004@gmail.com",
+    );
+    expect(screen.getByRole("link", { name: "github.com/LeeEugene1" })).toHaveAttribute(
       "href",
       "https://github.com/LeeEugene1",
     );
-    expect(screen.getByRole("link", { name: /Blog/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "dubaiyu.tistory.com" })).toHaveAttribute(
       "href",
       "https://dubaiyu.tistory.com/",
     );
@@ -237,7 +246,7 @@ describe("DesktopShell", () => {
       pointerId: 1,
     });
 
-    expect(portfolioWindow).toHaveStyle({ left: "270px", top: "88px" });
+    expect(portfolioWindow).toHaveStyle({ left: "350px", top: "60px" });
   });
 
   it("resizes a window by dragging a corner handle", () => {
