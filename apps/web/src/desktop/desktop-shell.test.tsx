@@ -240,6 +240,41 @@ describe("DesktopShell", () => {
     expect(portfolioWindow).toHaveStyle({ left: "270px", top: "88px" });
   });
 
+  it("resizes a window by dragging a corner handle", () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 1440,
+    });
+    Object.defineProperty(window, "innerHeight", {
+      configurable: true,
+      value: 900,
+    });
+    render(<DesktopShell />);
+
+    const portfolioWindow = screen.getByRole("dialog", { name: "Portfolio" });
+    const resizeHandle = screen.getByRole("button", {
+      name: "Resize Portfolio se",
+    });
+
+    fireEvent.pointerDown(resizeHandle, {
+      clientX: 1050,
+      clientY: 618,
+      pointerId: 1,
+    });
+    fireEvent.pointerMove(resizeHandle, {
+      clientX: 1130,
+      clientY: 658,
+      pointerId: 1,
+    });
+    fireEvent.pointerUp(resizeHandle, {
+      clientX: 1130,
+      clientY: 658,
+      pointerId: 1,
+    });
+
+    expect(portfolioWindow).toHaveStyle({ width: "900px", height: "600px" });
+  });
+
   it("renders sortable app icons with running state", () => {
     render(<DesktopShell />);
 

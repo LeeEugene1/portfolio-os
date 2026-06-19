@@ -32,20 +32,37 @@ type WindowState = {
   zIndex: number;
   x: number;
   y: number;
+  width: number;
+  height: number;
   openOrder: number;
   isMaximized: boolean;
   isMinimized: boolean;
 };
 
-type DragState = {
-  kind: "window";
-  appId: AppId;
-  offsetX: number;
-  offsetY: number;
-  startX: number;
-  startY: number;
-  hasMoved: boolean;
-};
+type ResizeDirection = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
+
+type DragState =
+  | {
+      kind: "window";
+      appId: AppId;
+      offsetX: number;
+      offsetY: number;
+      startX: number;
+      startY: number;
+      hasMoved: boolean;
+    }
+  | {
+      kind: "resize";
+      appId: AppId;
+      direction: ResizeDirection;
+      startX: number;
+      startY: number;
+      startWindowX: number;
+      startWindowY: number;
+      startWidth: number;
+      startHeight: number;
+      hasMoved: boolean;
+    };
 
 type IconPosition = {
   x: number;
@@ -65,6 +82,8 @@ function createWindowState(
     zIndex,
     x: (app?.defaultPosition.x ?? 0) + openOffset,
     y: (app?.defaultPosition.y ?? 0) + openOffset,
+    width: app?.defaultSize.width ?? 480,
+    height: app?.defaultSize.height ?? 360,
     openOrder,
     isMaximized: false,
     isMinimized: false,
@@ -78,16 +97,90 @@ function clampWindowPosition(x: number, y: number) {
   };
 }
 
+function clampValue(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(value, max));
+}
+
 const initialWindows: WindowState[] = [createWindowState("portfolio", 1, 0)];
 const iconOrigin = 24;
 const iconStep = 102;
 const iconSize = 88;
+const minimumWindowWidth = 280;
+const minimumWindowHeight = 220;
+const resizeDirections: ResizeDirection[] = [
+  "n",
+  "s",
+  "e",
+  "w",
+  "ne",
+  "nw",
+  "se",
+  "sw",
+];
 const initialIconPositions = Object.fromEntries(
   desktopApps.map((app, index) => [
     app.id,
     { x: iconOrigin, y: iconOrigin + index * iconStep },
   ]),
 ) as Record<AppId, IconPosition>;
+
+function resizeWindowState(
+  dragState: Extract<DragState, { kind: "resize" }>,
+  clientX: number,
+  clientY: number,
+) {
+  const deltaX = clientX - dragState.startX;
+  const deltaY = clientY - dragState.startY;
+  const startRight = dragState.startWindowX + dragState.startWidth;
+  const startBottom = dragState.startWindowY + dragState.startHeight;
+  const maxRight = window.innerWidth - 12;
+  const maxBottom = window.innerHeight - 88;
+  let nextX = dragState.startWindowX;
+  let nextY = dragState.startWindowY;
+  let nextWidth = dragState.startWidth;
+  let nextHeight = dragState.startHeight;
+
+  if (dragState.direction.includes("e")) {
+    nextWidth = clampValue(
+      dragState.startWidth + deltaX,
+      minimumWindowWidth,
+      maxRight - dragState.startWindowX,
+    );
+  }
+
+  if (dragState.direction.includes("s")) {
+    nextHeight = clampValue(
+      dragState.startHeight + deltaY,
+      minimumWindowHeight,
+      maxBottom - dragState.startWindowY,
+    );
+  }
+
+  if (dragState.direction.includes("w")) {
+    nextX = clampValue(
+      dragState.startWindowX + deltaX,
+      12,
+      startRight - minimumWindowWidth,
+    );
+    nextWidth = startRight - nextX;
+  }
+
+  if (dragState.direction.includes("n")) {
+    nextY = clampValue(
+      dragState.startWindowY + deltaY,
+      12,
+      startBottom - minimumWindowHeight,
+    );
+    nextHeight = startBottom - nextY;
+  }
+
+  return {
+    x: nextX,
+    y: nextY,
+    width: nextWidth,
+    height: nextHeight,
+  };
+}
 
 function clampIconPosition(x: number, y: number) {
   return {
@@ -353,6 +446,35 @@ export function DesktopShell() {
     });
   }
 
+  function startResize(
+    appId: AppId,
+    direction: ResizeDirection,
+    event: React.PointerEvent<HTMLElement>,
+    windowState: WindowState,
+  ) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (isMobileViewport() || windowState.isMaximized) {
+      return;
+    }
+
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    focusWindow(appId);
+    setDragState({
+      kind: "resize",
+      appId,
+      direction,
+      startX: event.clientX,
+      startY: event.clientY,
+      startWindowX: windowState.x,
+      startWindowY: windowState.y,
+      startWidth: windowState.width,
+      startHeight: windowState.height,
+      hasMoved: false,
+    });
+  }
+
   function dragWindow(event: React.PointerEvent<HTMLElement>) {
     if (!dragState) {
       return;
@@ -362,10 +484,13 @@ export function DesktopShell() {
       dragState.hasMoved ||
       Math.abs(event.clientX - dragState.startX) > 4 ||
       Math.abs(event.clientY - dragState.startY) > 4;
-    const nextPosition = clampWindowPosition(
-      event.clientX - dragState.offsetX,
-      event.clientY - dragState.offsetY,
-    );
+    const nextWindowState =
+      dragState.kind === "window"
+        ? clampWindowPosition(
+            event.clientX - dragState.offsetX,
+            event.clientY - dragState.offsetY,
+          )
+        : resizeWindowState(dragState, event.clientX, event.clientY);
 
     if (hasMoved !== dragState.hasMoved) {
       draggedWindowAppIdRef.current = dragState.appId;
@@ -374,7 +499,7 @@ export function DesktopShell() {
     setWindows((currentWindows) =>
       currentWindows.map((windowState) =>
         windowState.appId === dragState.appId
-          ? { ...windowState, ...nextPosition }
+          ? { ...windowState, ...nextWindowState }
           : windowState,
       ),
     );
@@ -503,10 +628,10 @@ export function DesktopShell() {
               }}
               role="dialog"
               style={{
-                height: windowState.isMaximized ? undefined : app.defaultSize.height,
+                height: windowState.isMaximized ? undefined : windowState.height,
                 left: windowState.isMaximized ? undefined : windowState.x,
                 top: windowState.isMaximized ? undefined : windowState.y,
-                width: windowState.isMaximized ? undefined : app.defaultSize.width,
+                width: windowState.isMaximized ? undefined : windowState.width,
                 zIndex: windowState.zIndex,
                 "--stack-index": stackIndex,
                 "--stack-offset": `${stackIndex * 10}px`,
@@ -577,6 +702,22 @@ export function DesktopShell() {
               <div className="window-body">
                 <Content />
               </div>
+              {resizeDirections.map((direction) => (
+                <button
+                  aria-label={`Resize ${app.label} ${direction}`}
+                  className={`window-resize-handle window-resize-${direction}`}
+                  key={direction}
+                  onClick={(event) => event.stopPropagation()}
+                  onPointerCancel={endDrag}
+                  onPointerDown={(event) =>
+                    startResize(app.id, direction, event, windowState)
+                  }
+                  onPointerMove={dragWindow}
+                  onPointerUp={endDrag}
+                  tabIndex={-1}
+                  type="button"
+                />
+              ))}
             </motion.article>
           );
         })}
