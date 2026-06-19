@@ -114,25 +114,15 @@ $portfolio-os-issue-runner 이슈 #6 진행해줘.
 
 ```txt
 $portfolio-os-issue-runner 이슈
-
     ↓
-
 AGENT_WORKFLOW (진입점)
-
     ↓ "상위 문서 확인해라"
-
 ORCHESTRATION (지금 몇 phase? 어떤 PR 순서?)
-
     ↓ 현재 위치 파악 후 돌아옴
-
 AGENT_WORKFLOW (승인 게이트 / 브랜치 규칙 / 플랜 형식)
-
     ↓
-
 TEST_PLAN (검증 명령 / 범위)
-
     ↓
-
 DEV_HARNESS (서버 실행 / 포트)
 ```
 
@@ -144,7 +134,7 @@ DEV_HARNESS (서버 실행 / 포트)
 
 이 방식으로 작업 순서, 브랜치 규칙, 검증 명령, PR 형식을 문서화하고 이슈별로 재사용했습니다.
 
-### 작업 방식
+## 작업 방식
 
 이 프로젝트는 문서, GitHub Issue, PR, 검증 스크립트를 기준으로 작업을 진행합니다.
 
@@ -164,23 +154,40 @@ GitHub Issue
   -> 사용자 검수
 ```
 
-### 하네스와 트러블슈팅
+## 하네스
 
-병렬 에이전트 작업에서는 구현 자체뿐 아니라 실행 환경을 일관되게 유지하는 것이 중요했습니다. 그래서 개발 서버 실행, 포트 관리, 검증 명령을 하네스로 문서화했습니다.
+  병렬 에이전트 작업에서는 구현 자체보다 실행 환경을 일관되게 유지하는 것이 중요했습
+  니다. 그래서 로컬 서버 실행, 포트 선택, 검증 명령, 서버 종료 기준을 하네스로 문서화
+  했습니다.
 
-  - `DEV_HARNESS.md`: 포트 확인, 서버 실행, 빈 포트 선택, 종료 시점을 문서화해 에이전
-  트가 매번 같은 절차로 개발 서버를 다루도록 했습니다.
-  - `TEST_PLAN.md`: `npm run verify`, `npm run verify:full`, `flutter analyze`,
-  `flutter test`, `flutter build apk`를 기준 검증 명령으로 묶었습니다.
-  - 디렉터리 공유로 브랜치와 파일 변경이 섞이는 문제는 이슈별 `git worktree`를 사용해
-  작업 공간을 분리했습니다.
-  - 로컬 포트 충돌은 `DEV_HARNESS.md`의 포트 확인과 빈 포트 선택 규칙으로 대응했습니
-  다.
-  - README 누락은 사용자 실행 방식, 검증 방식, 배포/하네스 절차가 바뀌면 README 업데
-  이트를 PR 조건에 포함하도록 했습니다.
-  - 오래된 `main` 기준 PR로 충돌이 나는 문제는 브랜치 생성, 구현 시작, 커밋, push, PR
-  생성 직전에 `git merge-base --is-ancestor origin/main HEAD`로 최신 `origin/main` 포
-  함 여부를 확인하도록 해결했습니다.
+  - `DEV_HARNESS.md`
+    - dev server 실행 방식
+    - 사용 중인 포트 확인
+    - 빈 포트 선택 규칙
+    - 작업 완료 후 서버 종료 기준
+    - 실행 중인 서버 URL 보고 방식
+
+  - `TEST_PLAN.md`
+    - 웹 검증 명령: `npm run verify`, `npm run verify:full`
+    - 모바일 검증 명령: `flutter analyze`, `flutter test`, `flutter build apk`
+    - Unit / Component / E2E / WebView 검증 범위
+
+  이 하네스를 기준으로 각 에이전트가 구현 후 동일한 검증 명령을 실행하고, 로컬 서버를 띄울 때도 같은 포트 확인 절차를 따르도록 했습니다.
+
+## 병렬 작업 트러블슈팅
+
+- 브랜치/파일 충돌
+  - 문제: 여러 이슈를 같은 디렉터리에서 진행하면 변경 사항과 커밋이 섞일 수 있음
+  - 해결: 이슈별 `git worktree`와 브랜치를 분리
+
+- 로컬 포트 충돌
+  - 문제: 여러 dev server가 같은 포트를 사용하려고 함
+  - 해결: `DEV_HARNESS.md`에 포트 확인, 빈 포트 선택, 서버 종료 기준 문서화
+
+- 오래된 main 기준 PR
+  - 문제: 병렬 작업 중 최신 `origin/main`이 반영되지 않아 PR 충돌 발생
+  - 해결: 브랜치 생성, 구현, 커밋, push, PR 생성 직전에 `git merge-base --is-
+  ancestor origin/main HEAD`로 main 포함 여부 확인
 
 ## 데모
 
