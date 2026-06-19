@@ -114,15 +114,25 @@ $portfolio-os-issue-runner 이슈 #6 진행해줘.
 
 ```txt
 $portfolio-os-issue-runner 이슈
+
     ↓
+
 AGENT_WORKFLOW (진입점)
+
     ↓ "상위 문서 확인해라"
+
 ORCHESTRATION (지금 몇 phase? 어떤 PR 순서?)
+
     ↓ 현재 위치 파악 후 돌아옴
+
 AGENT_WORKFLOW (승인 게이트 / 브랜치 규칙 / 플랜 형식)
+
     ↓
+
 TEST_PLAN (검증 명령 / 범위)
+
     ↓
+
 DEV_HARNESS (서버 실행 / 포트)
 ```
 
