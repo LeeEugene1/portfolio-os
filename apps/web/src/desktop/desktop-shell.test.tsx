@@ -201,10 +201,22 @@ describe("DesktopShell", () => {
       expect.stringContaining("profile.png"),
     );
     expect(within(contactProfile).getByText("Resume")).toBeInTheDocument();
-    expect(
-      within(contactProfile).getByText("5년 차 프론트엔드 개발자", { exact: false }),
-    ).toBeInTheDocument();
-    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "010 5652 6287" })).toHaveAttribute(
+      "href",
+      "tel:01056526287",
+    );
+    expect(screen.getByRole("link", { name: "uwm1004@gmail.com" })).toHaveAttribute(
+      "href",
+      "mailto:uwm1004@gmail.com",
+    );
+    expect(screen.getByRole("link", { name: "github.com/LeeEugene1" })).toHaveAttribute(
+      "href",
+      "https://github.com/LeeEugene1",
+    );
+    expect(screen.getByRole("link", { name: "dubaiyu.tistory.com" })).toHaveAttribute(
+      "href",
+      "https://dubaiyu.tistory.com/",
+    );
   });
 
   it("moves a window by dragging its titlebar", () => {

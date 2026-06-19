@@ -465,7 +465,16 @@ export function ContactApp() {
         <div className="contact-profile-copy">
           <p className="eyebrow">Resume</p>
           <h2>이유진</h2>
-          <p>5년 차 프론트엔드 개발자 · Next.js / React · 커머스 / AI / WebView</p>
+          <div className="contact-card-details" aria-label="Contact details">
+            <a href="tel:01056526287">010 5652 6287</a>
+            <a href="mailto:uwm1004@gmail.com">uwm1004@gmail.com</a>
+            <a href="https://github.com/LeeEugene1" rel="noreferrer" target="_blank">
+              github.com/LeeEugene1
+            </a>
+            <a href="https://dubaiyu.tistory.com/" rel="noreferrer" target="_blank">
+              dubaiyu.tistory.com
+            </a>
+          </div>
         </div>
       </section>
     </div>

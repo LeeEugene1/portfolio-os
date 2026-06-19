@@ -358,6 +358,10 @@ a {
   padding: 0;
 }
 
+.desktop-window[data-app-id="contact"] .window-body {
+  overflow: hidden;
+}
+
 .app-content {
   display: grid;
   gap: 14px;
@@ -860,7 +864,7 @@ button.app-link {
 }
 
 .contact-app {
-  width: min(100%, 640px);
+  width: min(100%, 720px);
   margin: 0 auto;
 }
 
@@ -868,7 +872,7 @@ button.app-link {
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: 18px;
+  gap: 22px;
   border: 1px solid #202124;
   border-radius: 8px;
   background: #f7f4ec;
@@ -897,7 +901,7 @@ button.app-link {
 }
 
 .contact-profile h2 {
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   font-size: 48px;
   line-height: 1;
 }
@@ -907,11 +911,26 @@ button.app-link {
   font-weight: 700;
 }
 
-.contact-profile-copy > p:last-child {
+.contact-card-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px 16px;
+}
+
+.contact-card-details a {
+  min-width: 0;
   color: #202124;
-  font-size: 20px;
-  line-height: 1.25;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.18;
   overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.contact-card-details a:hover,
+.contact-card-details a:focus-visible {
+  color: #8a3ffc;
+  outline: none;
 }
 
 .terminal-portfolio {
@@ -1618,8 +1637,13 @@ button.app-link {
     font-size: 34px;
   }
 
-  .contact-profile-copy > p:last-child {
-    font-size: 16px;
+  .contact-card-details {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+
+  .contact-card-details a {
+    font-size: 12px;
   }
 
 }
