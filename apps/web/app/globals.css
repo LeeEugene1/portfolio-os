@@ -1019,11 +1019,16 @@ button.app-link {
   margin: 0 auto;
 }
 
+.contact-eyebrow {
+  display: none;
+}
+
 .contact-profile {
   display: flex;
   min-width: 0;
-  align-items: flex-start;
+  align-items: center;
   gap: 14px;
+  justify-content: space-between;
   border: 1px solid #202124;
   border-radius: 8px;
   background: #f7f4ec;
@@ -1052,6 +1057,7 @@ button.app-link {
 }
 
 .contact-profile p {
+  margin: 0 0 8px;
   color: #4a4f52;
   font-weight: 700;
 }
@@ -1076,6 +1082,39 @@ button.app-link {
 .contact-card-details a:focus-visible {
   color: #8a3ffc;
   outline: none;
+}
+
+.contact-mobile-links {
+  display: none;
+}
+
+.contact-link {
+  display: grid;
+  gap: 4px;
+  border: 1px solid #202124;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #202124;
+  padding: 12px 14px;
+  text-decoration: none;
+}
+
+.contact-link:hover,
+.contact-link:focus-visible {
+  background: #fffbeb;
+  outline: none;
+}
+
+.contact-link span {
+  color: #6b7175;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.contact-link strong {
+  overflow-wrap: anywhere;
+  font-size: 16px;
 }
 
 .terminal-portfolio {
@@ -1554,13 +1593,17 @@ button.app-link {
     position: relative;
     top: auto !important;
     left: auto !important;
-    width: calc(100% - var(--stack-offset, 0px)) !important;
+    width: calc(100% - var(--stack-offset, 0px) - 6px) !important;
     height: calc(100svh - 118px) !important;
-    max-width: 100%;
+    max-width: calc(100% - 6px);
     max-height: none;
     margin-left: var(--stack-offset, 0px);
     margin-top: var(--stack-lift, 0px);
     box-shadow: 5px 5px 0 #202124;
+  }
+
+  .desktop-window:not([data-maximized="true"]):not([data-stack-index="0"]) {
+    height: 33svh !important;
   }
 
   .window-resize-handle {
@@ -1627,6 +1670,12 @@ button.app-link {
 
   .desktop-window[data-app-id="calculator"][data-maximized="true"] {
     height: auto !important;
+  }
+
+  .desktop-window[data-app-id="calculator"]:not([data-maximized="true"]):not(
+      [data-stack-index="0"]
+    ) {
+    height: 33svh !important;
   }
 
   .store-layout {
@@ -1768,6 +1817,7 @@ button.app-link {
   }
 
   .contact-profile {
+    align-items: center;
     gap: 10px;
     padding: 10px;
   }
@@ -1782,14 +1832,27 @@ button.app-link {
     font-size: 22px;
   }
 
+  .contact-profile p {
+    margin-bottom: 0;
+  }
+
   .contact-card-details {
+    display: none;
+  }
+
+  .contact-eyebrow,
+  .contact-mobile-links {
+    display: grid;
+  }
+
+  .contact-mobile-links {
     gap: 6px;
   }
 
-  .contact-card-details a {
-    font-size: 10px;
+  .contact-link {
+    min-height: 82px;
+    padding: 12px 14px;
   }
-
 }
 
 .calculator-app {
