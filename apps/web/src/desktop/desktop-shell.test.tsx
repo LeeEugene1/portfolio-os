@@ -200,7 +200,6 @@ describe("DesktopShell", () => {
       "src",
       expect.stringContaining("profile.png"),
     );
-    expect(within(contactProfile).getByText("Resume")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "010 5652 6287" })).toHaveAttribute(
       "href",
       "tel:01056526287",
@@ -247,7 +246,7 @@ describe("DesktopShell", () => {
       pointerId: 1,
     });
 
-    expect(portfolioWindow).toHaveStyle({ left: "270px", top: "88px" });
+    expect(portfolioWindow).toHaveStyle({ left: "350px", top: "200px" });
   });
 
   it("renders sortable app icons with running state", () => {

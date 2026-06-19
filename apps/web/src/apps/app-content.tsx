@@ -463,7 +463,6 @@ export function ContactApp() {
           width={112}
         />
         <div className="contact-profile-copy">
-          <p className="eyebrow">Resume</p>
           <h2>이유진</h2>
           <div className="contact-card-details" aria-label="Contact details">
             <a href="tel:01056526287">010 5652 6287</a>
