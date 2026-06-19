@@ -155,6 +155,156 @@ a {
   border-radius: 0;
 }
 
+.window-resize-handle {
+  position: absolute;
+  z-index: 4;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  touch-action: none;
+}
+
+.window-resize-handle::after {
+  position: absolute;
+  border-color: transparent;
+  content: "";
+}
+
+.window-resize-handle:hover::after {
+  border-color: rgba(32, 33, 36, 0.58);
+}
+
+.window-resize-n,
+.window-resize-s {
+  right: 14px;
+  left: 14px;
+  height: 9px;
+  cursor: ns-resize;
+}
+
+.window-resize-n {
+  top: 0;
+}
+
+.window-resize-s {
+  bottom: 0;
+}
+
+.window-resize-e,
+.window-resize-w {
+  top: 14px;
+  bottom: 14px;
+  width: 9px;
+  cursor: ew-resize;
+}
+
+.window-resize-e {
+  right: 0;
+}
+
+.window-resize-w {
+  left: 0;
+}
+
+.window-resize-ne,
+.window-resize-nw,
+.window-resize-se,
+.window-resize-sw {
+  width: 16px;
+  height: 16px;
+}
+
+.window-resize-ne {
+  top: 0;
+  right: 0;
+  cursor: nesw-resize;
+}
+
+.window-resize-nw {
+  top: 0;
+  left: 0;
+  cursor: nwse-resize;
+}
+
+.window-resize-se {
+  right: 0;
+  bottom: 0;
+  cursor: nwse-resize;
+}
+
+.window-resize-sw {
+  bottom: 0;
+  left: 0;
+  cursor: nesw-resize;
+}
+
+.window-resize-n::after,
+.window-resize-s::after {
+  right: 12px;
+  left: 12px;
+  border-top: 2px solid transparent;
+}
+
+.window-resize-n::after {
+  top: 2px;
+}
+
+.window-resize-s::after {
+  bottom: 2px;
+}
+
+.window-resize-e::after,
+.window-resize-w::after {
+  top: 12px;
+  bottom: 12px;
+  border-left: 2px solid transparent;
+}
+
+.window-resize-e::after {
+  right: 2px;
+}
+
+.window-resize-w::after {
+  left: 2px;
+}
+
+.window-resize-ne::after,
+.window-resize-nw::after,
+.window-resize-se::after,
+.window-resize-sw::after {
+  width: 8px;
+  height: 8px;
+  border-style: solid;
+}
+
+.window-resize-ne::after {
+  top: 2px;
+  right: 2px;
+  border-width: 2px 2px 0 0;
+}
+
+.window-resize-nw::after {
+  top: 2px;
+  left: 2px;
+  border-width: 2px 0 0 2px;
+}
+
+.window-resize-se::after {
+  right: 2px;
+  bottom: 2px;
+  border-width: 0 2px 2px 0;
+}
+
+.window-resize-sw::after {
+  bottom: 2px;
+  left: 2px;
+  border-width: 0 0 2px 2px;
+}
+
+.desktop-window[data-maximized="true"] .window-resize-handle {
+  display: none;
+}
+
 .window-titlebar {
   display: flex;
   min-height: 44px;
@@ -1398,6 +1548,10 @@ button.app-link {
     margin-left: var(--stack-offset, 0px);
     margin-top: var(--stack-lift, 0px);
     box-shadow: 5px 5px 0 #202124;
+  }
+
+  .window-resize-handle {
+    display: none;
   }
 
   .desktop-window[data-maximized="true"] {
