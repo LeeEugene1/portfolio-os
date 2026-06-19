@@ -39,7 +39,7 @@ export const desktopApps: DesktopApp[] = [
     title: "Portfolio",
     icon: BriefcaseBusiness,
     defaultSize: { width: 820, height: 560 },
-    defaultPosition: { x: 310, y: 170 },
+    defaultPosition: { x: 310, y: 30 },
     content: PortfolioApp,
   },
   {
@@ -65,7 +65,7 @@ export const desktopApps: DesktopApp[] = [
     label: "Contact",
     title: "Contact",
     icon: Mail,
-    defaultSize: { width: 640, height: 170 },
+    defaultSize: { width: 500, height: 190 },
     defaultPosition: { x: 610, y: 190 },
     content: ContactApp,
   },

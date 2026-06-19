@@ -246,7 +246,7 @@ describe("DesktopShell", () => {
       pointerId: 1,
     });
 
-    expect(portfolioWindow).toHaveStyle({ left: "350px", top: "200px" });
+    expect(portfolioWindow).toHaveStyle({ left: "350px", top: "60px" });
   });
 
   it("renders sortable app icons with running state", () => {
