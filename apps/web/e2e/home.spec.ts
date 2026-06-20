@@ -54,3 +54,43 @@ test("fills the screen when a window is maximized on mobile", async ({
     height: 844,
   });
 });
+
+test("scrolls mobile icons horizontally and exposes stacked windows", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const icons = page.getByRole("region", { name: "Applications" });
+
+  await expect(icons).toBeVisible();
+  await expect
+    .poll(async () =>
+      icons.evaluate((node) => node.scrollWidth - node.clientWidth),
+    )
+    .toBeGreaterThan(0);
+
+  await icons.evaluate((node) => {
+    node.scrollLeft = node.scrollWidth;
+  });
+
+  await expect
+    .poll(async () => icons.evaluate((node) => node.scrollLeft))
+    .toBeGreaterThan(0);
+
+  const singleWindowBox = await page
+    .getByRole("dialog", { name: "Portfolio" })
+    .boundingBox();
+
+  await page.getByRole("button", { name: "Open Store" }).click();
+  await expect(page.getByRole("dialog", { name: "Store" })).toBeVisible();
+
+  const storeBox = await page.getByRole("dialog", { name: "Store" }).boundingBox();
+  const portfolioBox = await page
+    .getByRole("dialog", { name: "Portfolio" })
+    .boundingBox();
+
+  expect(singleWindowBox?.height).toBeGreaterThan(700);
+  expect(storeBox?.height).toBeLessThan((singleWindowBox?.height ?? 0) - 80);
+  expect(portfolioBox?.y).toBeLessThan((storeBox?.y ?? 0) + (storeBox?.height ?? 0));
+});

@@ -1553,9 +1553,12 @@ button.app-link {
     max-width: 100%;
     width: 100%;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding: 0 24px 8px 2px;
     pointer-events: auto;
     scroll-snap-type: x proximity;
     scrollbar-width: none;
+    touch-action: pan-x;
   }
 
   .desktop-icons::-webkit-scrollbar {
@@ -1566,9 +1569,11 @@ button.app-link {
     position: static;
     width: 70px;
     min-width: 70px;
+    flex: 0 0 70px;
     min-height: 78px;
     padding: 6px 2px;
     scroll-snap-align: start;
+    touch-action: pan-x;
   }
 
   .desktop-icon-tile {
@@ -1604,6 +1609,12 @@ button.app-link {
 
   .desktop-window:not([data-maximized="true"]):not([data-stack-index="0"]) {
     height: 33svh !important;
+    margin-top: calc(var(--stack-lift, 0px) - 72px);
+  }
+
+  .window-layer:not([data-window-count="1"])
+    .desktop-window:not([data-maximized="true"])[data-stack-index="0"] {
+    height: calc(100svh - 218px) !important;
   }
 
   .window-resize-handle {
@@ -1616,9 +1627,6 @@ button.app-link {
     width: 100% !important;
     height: auto !important;
     margin: 0;
-    border-right: 0;
-    border-bottom: 0;
-    border-left: 0;
     border-radius: 0;
     z-index: 160 !important;
   }
@@ -1676,6 +1684,11 @@ button.app-link {
       [data-stack-index="0"]
     ) {
     height: 33svh !important;
+  }
+
+  .window-layer:not([data-window-count="1"])
+    .desktop-window[data-app-id="calculator"]:not([data-maximized="true"])[data-stack-index="0"] {
+    height: calc(100svh - 218px) !important;
   }
 
   .store-layout {

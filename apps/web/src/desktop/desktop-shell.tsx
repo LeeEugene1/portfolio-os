@@ -581,6 +581,7 @@ export function DesktopShell() {
         className="window-layer"
         aria-label="Open windows"
         data-has-maximized={hasMaximizedWindow}
+        data-window-count={visibleWindows.length}
       >
         {orderedWindows.map((windowState, stackIndex) => {
           const app = appsById.get(windowState.appId);
