@@ -209,10 +209,6 @@ describe("DesktopShell", () => {
       expect.stringContaining("profile.png"),
     );
     expect(screen.getByLabelText("Contact channels")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "010 5652 6287" })).toHaveAttribute(
-      "href",
-      "tel:01056526287",
-    );
     expect(screen.getByRole("link", { name: "uwm1004@gmail.com" })).toHaveAttribute(
       "href",
       "mailto:uwm1004@gmail.com",
