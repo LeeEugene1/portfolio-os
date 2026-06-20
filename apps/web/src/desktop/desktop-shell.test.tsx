@@ -178,6 +178,9 @@ describe("DesktopShell", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Open Calculator" }));
 
+    expect(
+      screen.getByRole("region", { name: "Open windows" }),
+    ).toHaveAttribute("data-window-count", "2");
     expect(screen.getAllByRole("dialog")[0]).toHaveAccessibleName(
       "Calculator",
     );
