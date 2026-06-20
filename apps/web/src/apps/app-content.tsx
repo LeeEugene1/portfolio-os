@@ -164,28 +164,34 @@ const resumeExperience = [
       {
         title: "이커머스 모바일 웹 프론트엔드 개발 (떠리몰)",
         description:
-          "MAU 240만 규모 떠리몰 모바일 웹과 Flutter WebView 기반 구매 전환 플로우를 개발하고 운영했습니다.",
+          "MAU 240만 규모 떠리몰 모바일 웹과 Flutter WebView 기반 구매 전환 플로우를 신규 개발하고 유지보수했습니다.",
         highlights: [
+          "상품 탐색, 장바구니, OAuth 로그인/회원가입, 개인화 추천 등 핵심 구매 전환 플로우 개발",
+          "외주 개발 이관 이후 복잡한 이커머스 비즈니스 로직 안정화 및 주요 사용자 이슈 개선",
           "iOS WKWebView 쿠키 반영 지연을 분석해 Callback accessToken을 클라이언트 쿠키에 동기화하고, 로그인 직후 5분 내 401 인증 오류를 170건에서 20건으로 88% 감소",
           "수량 변경 debounce 조정과 가격 조회 병렬 처리로 장바구니 가격 반영 시간을 1.5초에서 0.6초로 60% 단축",
           "PC/Mobile, 회원/비회원 장바구니 로직을 모노레포 공통 패키지(@repo/common)로 통합해 코드량 2.2% 감소",
           "useInView 지연 로딩, Redux/메모리 캐싱, Virtuoso 가상 리스트, 스크롤 복원, 이미지 최적화로 상품 탐색 UX 개선",
           "최근 본 상품 기반 개인화 추천 섹션을 구축해 추천 영역 월 평균 클릭 100만 달성",
-          "page → section → item 이벤트 텍소노미와 DataTagWrapper를 설계해 52개 페이지 마케팅 이벤트 추적 표준화",
+          "page → section → item 단위의 이벤트 텍소노미와 공통 DataTagWrapper를 설계해 52개 페이지 전시 영역별 클릭/노출 추적 규격 통일",
+          "Airbridge 이벤트명/payload 변환 로직을 공통 provider로 분리해 마케팅 SDK 의존성 격리",
           "Claude Code 기반 Plan-Generate-Check 오케스트레이터와 Codex/Claude/Gemini 병렬 PR 리뷰 워크플로우 구성",
-          "Jira 기반 데일리 TODO 알림, 주간 웹 퍼포먼스 측정, Playwright 스크린샷, 릴리즈/RCA/스펙 문서 자동화",
+          "Jira 진행 중 티켓 기반 데일리 TODO Google Chat 알림 봇 구축 및 팀 공유",
+          "주간 웹 퍼포먼스 측정 및 Playwright 스크린샷 자동화",
+          "격주 릴리즈 정리 시간을 10분에서 1분으로 단축하고 장애/이슈 원인 분석(RCA), 스펙, 계획서 60개 위키 문서 자동화",
         ],
         stack: "Next.js, React, TypeScript, Redux Toolkit, Material UI",
       },
       {
         title: "백오피스 프론트 개발",
         description:
-          "이커머스 운영 어드민의 주문, 상품, 마케팅, CS, 통계 관리 화면과 운영 자동화 화면을 개발했습니다.",
+          "이커머스 운영 어드민의 주문, 상품, 마케팅, CS, 통계 관리 화면을 신규 개발했습니다.",
         highlights: [
           "SCSS 공통 스타일과 공통 컴포넌트로 백오피스 UI 일관성과 개발 재사용성 확보",
-          "AG Grid 공통 모듈화와 엑셀 다운로드 컴포넌트 구축으로 반복 구현 비용 감소",
-          "거래처 관리 칸반보드 신규 개발 및 Figma AI 생성 화면을 기존 SCSS/컴포넌트/상태관리 패턴에 맞추는 프롬프트 하네스 설계",
-          "Node 22 기반 Dockerfile 작성, 환경별 빌드/실행 절차와 ESLint/Prettier 설정 가이드 문서화",
+          "AG Grid 공통 모듈화 및 엑셀 다운로드 컴포넌트를 구축해 테이블 반복 구현 비용을 줄이고 컬럼 선택/제외 등 화면별 확장성 확보",
+          "거래처 관리 칸반보드 신규 개발",
+          "Figma AI 생성 화면을 기존 백오피스의 SCSS 공통 스타일, 공통 컴포넌트, 상태관리 패턴에 맞게 전환하도록 프롬프트 하네스를 설계해 구현 일관성 확보",
+          "Node 22 기반 Dockerfile을 직접 작성해 환경별 빌드, 실행 절차를 구성하고 Node / 환경변수 / ESLint / Prettier 설정 가이드 문서화",
         ],
         stack: "React, Tanstack Query, Zustand, AG Grid, SCSS, Docker",
       },
@@ -223,7 +229,7 @@ const resumeExperience = [
   },
   {
     company: "휴네이처",
-    period: "2021.03 ~ 2022.03 (1년)",
+    period: "2021.03 ~ 2022.03 (1년) - (주)휴네이처, 서울 중구",
     roles: [
       {
         title: "공군 전파탐지기 소프트웨어 웹 개발",
@@ -381,7 +387,6 @@ export function ResumeApp() {
 
       <section className="resume-contact" aria-label="Resume contact">
         <a href="mailto:uwm1004@gmail.com">uwm1004@gmail.com</a>
-        <a href="tel:01056526287">010 5652 6287</a>
         <a href="https://github.com/LeeEugene1" rel="noreferrer" target="_blank">
           Github
         </a>
@@ -457,11 +462,6 @@ export function ContactApp() {
       href: "mailto:uwm1004@gmail.com",
       label: "Email",
       value: "uwm1004@gmail.com",
-    },
-    {
-      href: "tel:01056526287",
-      label: "Phone",
-      value: "010 5652 6287",
     },
     {
       href: "https://github.com/LeeEugene1",
