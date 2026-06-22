@@ -496,6 +496,7 @@ a {
   background: #0a0b0d;
   color: #f7f8f8;
   padding: 0;
+  scroll-behavior: smooth;
 }
 
 .desktop-window[data-app-id="resume"] .window-body {
@@ -1120,7 +1121,7 @@ button.app-link {
 .terminal-portfolio {
   display: grid;
   min-height: 100%;
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: auto 1fr;
   background: #0a0b0d;
   color: #f7f8f8;
   font-family:
@@ -1128,16 +1129,6 @@ button.app-link {
     Consolas,
     "Liberation Mono",
     monospace;
-}
-
-.terminal-header {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 8px;
-  border-bottom: 1px solid #2c3035;
-  background: #181b20;
-  padding: 10px 14px;
 }
 
 .terminal-dot {
@@ -1159,27 +1150,25 @@ button.app-link {
   background: #4fb286;
 }
 
-.terminal-path {
-  min-width: 0;
-  overflow: hidden;
-  color: #8f98a3;
-  font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.terminal-path strong {
-  color: #72b7ff;
-  font-weight: 700;
-}
-
 .terminal-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 3;
   display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid #2c3035;
+  background: rgba(16, 19, 24, 0.96);
+  padding: 8px;
+  backdrop-filter: blur(12px);
+}
+
+.terminal-tab-list {
+  display: flex;
+  min-width: 0;
+  flex: 1;
   gap: 6px;
   overflow-x: auto;
-  border-bottom: 1px solid #2c3035;
-  background: #101318;
-  padding: 8px;
 }
 
 .terminal-tab {
@@ -1195,6 +1184,7 @@ button.app-link {
   font: inherit;
   font-size: 12px;
   padding: 7px 9px;
+  text-decoration: none;
 }
 
 .terminal-tab span {
@@ -1210,14 +1200,44 @@ button.app-link {
 
 .terminal-tab:hover,
 .terminal-tab:focus-visible,
-.terminal-tab[aria-pressed="true"] {
+.terminal-tab[aria-current="true"] {
   border-color: #86efac;
   color: #ffffff;
   outline: none;
 }
 
-.terminal-tab[aria-pressed="true"] {
+.terminal-tab[aria-current="true"] {
   background: #203027;
+}
+
+.terminal-pdf-link {
+  display: inline-flex;
+  min-width: max-content;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #72b7ff;
+  border-radius: 6px;
+  background: #15243a;
+  color: #72b7ff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 7px 10px;
+  text-decoration: none;
+}
+
+.terminal-pdf-link:hover,
+.terminal-pdf-link:focus-visible {
+  border-color: #ffffff;
+  color: #ffffff;
+  outline: none;
+}
+
+.terminal-panels {
+  display: grid;
+  gap: 26px;
+  align-content: start;
+  padding: 24px;
 }
 
 .terminal-panel {
@@ -1225,13 +1245,15 @@ button.app-link {
   align-content: start;
   gap: 20px;
   min-height: 0;
-  padding: 24px;
+  scroll-margin-top: 64px;
 }
 
-.terminal-prompt {
+.terminal-kicker {
   margin: 0;
   color: #86efac;
   font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .terminal-title-row {
@@ -1280,6 +1302,24 @@ button.app-link {
   text-decoration: none;
 }
 
+.terminal-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.terminal-metrics li {
+  list-style: none;
+  border: 1px solid #2c3035;
+  border-radius: 8px;
+  background: #101318;
+  color: #f7f8f8;
+  line-height: 1.45;
+  padding: 12px;
+}
+
 .terminal-sections {
   display: grid;
   gap: 14px;
@@ -1319,6 +1359,18 @@ button.app-link {
   position: absolute;
   left: 0;
   color: #86efac;
+}
+
+.terminal-section a {
+  color: #72b7ff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.terminal-section a:hover,
+.terminal-section a:focus-visible {
+  color: #ffffff;
+  text-decoration: underline;
 }
 
 .terminal-progress {
@@ -1495,6 +1547,26 @@ button.app-link {
   line-height: 1.48;
 }
 
+.resume-highlight-group {
+  display: grid;
+  gap: 6px;
+}
+
+.resume-highlight-group strong {
+  color: #202124;
+  font-weight: 800;
+}
+
+.resume-highlight-group ul {
+  gap: 6px;
+  padding-left: 18px;
+}
+
+.resume-highlight-group li {
+  color: #3f4548;
+  font-weight: 400;
+}
+
 .resume-stack {
   color: #6a7074 !important;
   font-size: 13px;
@@ -1522,20 +1594,6 @@ button.app-link {
 
 .resume-education-list p {
   color: #4a4f52;
-}
-
-.resume-footer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 16px;
-  border-top: 1px solid #c9c2b4;
-  color: #4a4f52;
-  font-size: 13px;
-  padding-top: 14px;
-}
-
-.resume-footer a {
-  color: #255ea8;
 }
 
 @media (max-width: 720px) {
@@ -1788,6 +1846,23 @@ button.app-link {
 
   .window-body {
     padding: 16px;
+  }
+
+  .terminal-panels {
+    gap: 22px;
+    padding: 18px;
+  }
+
+  .terminal-title-row {
+    display: grid;
+  }
+
+  .terminal-title-row h2 {
+    font-size: 24px;
+  }
+
+  .terminal-metrics {
+    grid-template-columns: 1fr;
   }
 
   .desktop-window[data-app-id="portfolio"] .window-body {
