@@ -32,18 +32,42 @@ describe("DesktopShell", () => {
     expect(
       container.querySelector(`[aria-label="Terminal portfolio"]`),
     ).toBeInTheDocument();
-    expect(screen.getByText("Eugene Lee")).toBeInTheDocument();
+    expect(screen.getByText("Frontend Engineer")).toBeInTheDocument();
+    expect(screen.queryByText("eugene@portfolio:", { exact: false })).not.toBeInTheDocument();
   });
 
-  it("shows terminal portfolio project details", () => {
+  it("shows anchor-based portfolio sections", () => {
     render(<DesktopShell />);
 
-    fireEvent.click(screen.getByRole("button", { name: "2 thirtymall" }));
+    const portfolioWindow = screen.getByRole("dialog", { name: "Portfolio" });
+    const thirtymallLink = screen.getByRole("link", { name: "2 thirtymall" });
+    const portfolioPdfLink = within(portfolioWindow).getByRole("link", { name: "PDF" });
 
-    expect(screen.getByText("Thirtymall")).toBeInTheDocument();
+    expect(thirtymallLink).toHaveAttribute("href", "#portfolio-thirtymall");
+    expect(portfolioPdfLink).toHaveAttribute("href", "/portfolio-eugene-lee-frontend.pdf");
+    expect(portfolioPdfLink).toHaveAttribute(
+      "download",
+      "포트폴리오_이유진_프론트엔드개발자.pdf",
+    );
+    fireEvent.click(thirtymallLink);
+    expect(thirtymallLink).toHaveAttribute("aria-current", "true");
+    expect(within(portfolioWindow).getByText("Thirtymall")).toBeInTheDocument();
+    expect(within(portfolioWindow).getByText("Caveduck")).toBeInTheDocument();
+    expect(within(portfolioWindow).getByText("Sheepfarm")).toBeInTheDocument();
+    expect(within(portfolioWindow).getByText("Etc")).toBeInTheDocument();
     expect(
-      screen.getByText("장바구니 응답 속도 1.5s에서 0.6s로 개선"),
+      within(portfolioWindow).getAllByText("장바구니 가격 반영 시간 1.5초 → 0.6초 개선"),
+    ).toHaveLength(1);
+    expect(
+      within(portfolioWindow).queryByText("eugene@portfolio:", { exact: false }),
+    ).not.toBeInTheDocument();
+    expect(
+      within(portfolioWindow).getByText("웹/모바일 52개 페이지 이벤트 추적 구조 표준화"),
     ).toBeInTheDocument();
+    expect(within(portfolioWindow).getByRole("link", { name: "UX_Portfolio 바로가기" })).toHaveAttribute(
+      "href",
+      "https://leeeugene1.github.io/UX_Portfolio/",
+    );
   });
 
   it("opens Resume as a document with the provided profile and career details", () => {
@@ -51,22 +75,32 @@ describe("DesktopShell", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Open Resume" }));
 
-    expect(
-      screen.getByRole("dialog", { name: "Resume" }),
-    ).toBeInTheDocument();
-    expect(screen.getByLabelText("Resume document")).toBeInTheDocument();
-    expect(screen.getByRole("img", { name: "이유진 증명사진" })).toHaveAttribute(
+    const resumeWindow = screen.getByRole("dialog", { name: "Resume" });
+
+    expect(resumeWindow).toBeInTheDocument();
+    expect(within(resumeWindow).getByLabelText("Resume document")).toBeInTheDocument();
+    expect(within(resumeWindow).getByRole("img", { name: "이유진 증명사진" })).toHaveAttribute(
       "src",
       expect.stringContaining("profile.png"),
     );
-    expect(screen.getByText("로그인 오류 88% 개선", { exact: false })).toBeInTheDocument();
-    expect(screen.getByText("핌아시아")).toBeInTheDocument();
-    expect(screen.getByText("iOS WKWebView", { exact: false })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Github" })).toHaveAttribute(
+    expect(within(resumeWindow).getByText("로그인 오류 88% 개선", { exact: false })).toBeInTheDocument();
+    expect(within(resumeWindow).getByText("핌아시아")).toBeInTheDocument();
+    expect(within(resumeWindow).getByText("iOS WKWebView", { exact: false })).toBeInTheDocument();
+    expect(
+      within(resumeWindow).getByText("iOS 로그인 직후 5분 내 401 인증 오류 88% 감소(170건 → 20건)"),
+    ).toBeInTheDocument();
+    expect(within(resumeWindow).getByRole("link", { name: "Github" })).toHaveAttribute(
       "href",
       "https://github.com/LeeEugene1",
     );
-    expect(screen.getByRole("button", { name: "인쇄" })).toBeInTheDocument();
+    expect(within(resumeWindow).getByRole("link", { name: "PDF" })).toHaveAttribute(
+      "href",
+      "/resume-eugene-lee-frontend.pdf",
+    );
+    expect(within(resumeWindow).getByRole("link", { name: "PDF" })).toHaveAttribute(
+      "download",
+      "이력서_이유진_프론트엔드개발자.pdf",
+    );
   });
 
   it("opens and closes app windows from desktop controls", () => {
