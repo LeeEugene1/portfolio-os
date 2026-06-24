@@ -12,20 +12,28 @@ export type CartLine = CartItem & {
 
 const productIds = new Set(products.map((product) => product.id));
 
-export function addCartItem(items: CartItem[], productId: string): CartItem[] {
-  if (!productIds.has(productId)) {
+export function isValidProductId(productId: string) {
+  return productIds.has(productId);
+}
+
+export function addCartItem(
+  items: CartItem[],
+  productId: string,
+  quantity = 1,
+): CartItem[] {
+  if (!isValidProductId(productId) || quantity <= 0) {
     return items;
   }
 
   const existingItem = items.find((item) => item.productId === productId);
 
   if (!existingItem) {
-    return [...items, { productId, quantity: 1 }];
+    return [...items, { productId, quantity }];
   }
 
   return items.map((item) =>
     item.productId === productId
-      ? { ...item, quantity: item.quantity + 1 }
+      ? { ...item, quantity: item.quantity + quantity }
       : item,
   );
 }
@@ -62,7 +70,7 @@ export function getCartLines(items: CartItem[]): CartLine[] {
       {
         ...item,
         product,
-      lineTotal: product.salePrice * item.quantity,
+        lineTotal: product.salePrice * item.quantity,
       },
     ];
   });
@@ -99,7 +107,7 @@ export function parseStoredCart(value: string | null): CartItem[] {
         typeof item.quantity !== "number" ||
         !Number.isInteger(item.quantity) ||
         item.quantity <= 0 ||
-        !productIds.has(item.productId)
+        !isValidProductId(item.productId)
       ) {
         return [];
       }
